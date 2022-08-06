@@ -1,0 +1,58 @@
+@import "navbar";
+
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap");
+
+// basics scss
+:root {
+  font-size: 16px;
+  font-family: "Noto Sans", sans-serif;
+  --text-primary: #b6b6b6;
+  --text-secondary: #ececec;
+  --main-dark-bg: #16161d;
+  --card-bg: #dfdfdf;
+  --bg-primary: #23232e;
+  --bg-secondary: #0f0f13;
+  --base-pink: #d83e96;
+  --base-pink-light: #e377b5;
+  --base-purple: #8122a7;
+  --base-red: #ec2049;
+  --base-orange: #f26b38;
+  --base-yellow: #e2bf11;
+  --base-turquoise: #32b1b6;
+  --base-turquoise-light: #3fe5eb;
+  --transition-fast: 0.25s ease-in-out;
+  --transition-slow: 0.4s ease-in-out;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: white;
+  color: var(--main-dark-bg);
+}
+
+.main {
+  margin-left: 5rem;
+  position: relative;
+  transition: var(--transition-slow);
+  min-height: 100vh;
+}
+
+.router-view {
+  padding: 1rem;
+  overflow-x: hidden;
+}
+
+// scrollbar
+body::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+body::-webkit-scrollbar-track {
+  background-color: #1e1e24;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: var(--base-turquoise);
+}
