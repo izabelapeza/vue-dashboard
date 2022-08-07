@@ -2,20 +2,24 @@
 // imports
 import axios from "axios";
 import { ref } from "vue";
+import type { Ref } from "vue";
+import BarChart from "@/components/charts/BarChart.vue";
+import { nonEnglishSpeakersFormat } from "@/utils/dataFormatter";
 
-// data
-const data = ref([]);
+// data formating
+const nonEnglishSpeakersData: Ref<{
+  labels: string[];
+  datasets: { data: number[]; backgroundColor: string }[];
+} | null> = ref(null);
 
 // axios
 axios
   .get(
-    "https://datausa.io/api/data?measure=Average%20Wage,Rank,Average%20Wage%20Appx%20MOE,Record%20Count&drilldowns=Industry Group&Workforce%20Status=true&Record%20Count>=5"
+    "https://datausa.io/api/data?Geography=16000US3651000&measure=Languages%20Spoken&drilldowns=Language Spoken at Home"
   )
   .then((response) => {
-    data.value = response.data["data"].filter(
-      (d: { "ID Year": string; "Slug Industry Group": string }) => {
-        return d["ID Year"] == "2019";
-      }
+    nonEnglishSpeakersData.value = nonEnglishSpeakersFormat(
+      response.data["data"]
     );
   })
   .catch((error) => {
@@ -26,7 +30,12 @@ axios
 <template>
   <div class="data-container">
     <div class="data-container__card card1"></div>
-    <div class="data-container__card card2"></div>
+    <div class="data-container__card card2">
+      <BarChart
+        :data="nonEnglishSpeakersData"
+        :chartTitle="'Non-English Speakers'"
+      />
+    </div>
     <div class="data-container__card card3"></div>
     <div class="data-container__card card4"></div>
   </div>
@@ -66,6 +75,9 @@ axios
 
   &__card {
     background-color: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

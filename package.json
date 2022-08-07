@@ -10,6 +10,7 @@
   "dependencies": {
     "@mdi/js": "^7.0.96",
     "axios": "^0.27.2",
+    "chart.js": "^3.9.1",
     "mdi-vue": "^3.0.13",
     "vue": "^3.2.13",
     "vue-axios": "^3.4.1",
