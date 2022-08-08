@@ -12,7 +12,9 @@ const isLoading = ref(false);
   <NavbarElement />
   <div class="main">
     <LoaderElement v-if="isLoading" />
-    <router-view class="router-view" />
+    <div class="router-view">
+      <router-view />
+    </div>
   </div>
 </template>
 

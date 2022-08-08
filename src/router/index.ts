@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import TempView from "../views/TempView.vue";
 import AboutView from "../views/AboutView.vue";
+import StateView from "../views/StateView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "temp",
-    component: TempView,
+    component: AboutView,
   },
   {
-    path: "/about",
-    name: "about",
-    component: AboutView,
+    path: "/state/:id",
+    name: "state",
+    component: StateView,
   },
 ];
 

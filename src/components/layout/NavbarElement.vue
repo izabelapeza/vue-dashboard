@@ -25,11 +25,11 @@ const changeTheme = (isDarkMode: boolean) => {
     <div class="navbar__items">
       <router-link to="/" class="navbar__item">
         <mdicon name="dogSide" size="46" class="navbar__icon" />
-        <span class="text">Temp</span>
-      </router-link>
-      <router-link to="/about" class="navbar__item">
-        <mdicon name="fruitCherries" size="46" class="navbar__icon" />
         <span class="text">About</span>
+      </router-link>
+      <router-link to="/state/NY" class="navbar__item">
+        <mdicon name="fruitCherries" size="46" class="navbar__icon" />
+        <span class="text">State</span>
       </router-link>
       <div class="navbar__item settings">
         <mdicon name="cog" size="46" class="navbar__icon cog" />
