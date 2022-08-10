@@ -17,5 +17,3 @@ const isLoading = ref(false);
     </div>
   </div>
 </template>
-
-<style lang="scss"></style>

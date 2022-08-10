@@ -43,30 +43,37 @@ const nonEnglishSpeakersRequest = () => {
     });
 };
 
+// background image
+const numPictures = ref(8);
+const imageUrl = ref("");
+
+const getImageUrl = () => {
+  const randomPicture = Math.floor(Math.random() * numPictures.value) + 1;
+  return new URL(`../assets/img/states/${randomPicture}.jpg`, import.meta.url)
+    .href;
+};
+
+let tempStyle = computed(() => {
+  return {
+    backgroundImage: `url(${imageUrl.value})`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    backgroundPosition: "0% 50%",
+  };
+});
+
 // change state
 const changeState = (key: string) => {
   stateId.value = key;
   nonEnglishSpeakersRequest();
+  imageUrl.value = getImageUrl();
 };
 
 // on mounted
 onMounted(() => {
   getStateId();
   nonEnglishSpeakersRequest();
-});
-
-// background image
-const getImageUrl = () => {
-  return new URL(`../assets/img/states/NY.jpg`, import.meta.url).href;
-};
-let tempStyle = computed(() => {
-  return {
-    backgroundImage: `url(${getImageUrl()})`,
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "0% 50%",
-    filter: "grayscale(1)",
-  };
+  imageUrl.value = getImageUrl();
 });
 </script>
 
@@ -130,5 +137,7 @@ let tempStyle = computed(() => {
   margin-bottom: 1rem;
   justify-content: right;
   padding: 0 1rem;
+  align-items: flex-start;
+  padding-top: 1.2rem;
 }
 </style>

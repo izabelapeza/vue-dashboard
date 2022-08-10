@@ -8,8 +8,10 @@
   font-family: "Noto Sans", sans-serif;
   --text-primary: #b6b6b6;
   --text-secondary: #ececec;
-  --main-dark-bg: #16161d;
+  --bg: white;
+  --text: #16161d;
   --card-bg: #dfdfdf;
+  --card-bg-contrast: #23232e;
   --bg-primary: #23232e;
   --bg-secondary: #0f0f13;
   --base-pink: #d83e96;
@@ -28,8 +30,8 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: white;
-  color: var(--main-dark-bg);
+  background-color: var(--bg);
+  color: var(--text);
 }
 
 .main {

@@ -14,13 +14,15 @@ const emit = defineEmits<{
 const changeTheme = () => {
   let root = document.documentElement;
   if (darkMode.value) {
-    document.body.style.backgroundColor = "var(--main-dark-bg)";
-    document.body.style.color = "white";
+    root.style.setProperty("--bg", "#16161d");
+    root.style.setProperty("--text", "white");
     root.style.setProperty("--card-bg", "#23232e");
+    root.style.setProperty("--card-bg-contrast", "#dfdfdf");
   } else {
-    document.body.style.backgroundColor = "white";
-    document.body.style.color = "var(--main-dark-bg)";
+    root.style.setProperty("--bg", "white");
+    root.style.setProperty("--text", "#16161d");
     root.style.setProperty("--card-bg", "#dfdfdf");
+    root.style.setProperty("--card-bg-contrast", "#23232e");
   }
   localStorage.setItem("darkMode", `${darkMode.value}`);
   emit("newTheme", darkMode.value);
