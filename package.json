@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@mdi/js": "^7.0.96",
+    "@vueuse/components": "^9.1.0",
+    "@vueuse/core": "^9.1.0",
     "axios": "^0.27.2",
     "chart.js": "^3.9.1",
     "mdi-vue": "^3.0.13",

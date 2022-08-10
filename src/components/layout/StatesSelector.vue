@@ -1,31 +1,44 @@
 <script lang="ts" setup>
 // imports
-import { stateID } from "@/utils/statesID";
-import { computed, ref } from "@vue/reactivity";
+import { stateID, stateShortcut } from "@/utils/statesID";
+import { computed, ref, Ref } from "@vue/reactivity";
 import { onMounted, defineEmits } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { vOnClickOutside } from "@vueuse/components";
 
 const route = useRoute();
 const router = useRouter();
 
 // selected state
-const selectedState = ref("");
+type State = typeof stateShortcut[number];
+const isState = (x: any): x is State => stateShortcut.includes(x);
+const selectedState: Ref<keyof typeof stateID | ""> = ref("");
 
 onMounted(() => {
   const routeId = route.params.id;
-  selectedState.value = typeof routeId === "string" ? routeId : "";
+  if (isState(routeId)) {
+    selectedState.value = routeId;
+  } else {
+    selectedState.value = "";
+  }
 });
 
 // change state action
 const emit = defineEmits(["changeState"]);
 const changeState = (state: string) => {
-  selectedState.value = state;
-  router.push(`/state/${selectedState.value}`);
-  emit("changeState", stateID[selectedState.value].key);
+  if (isState(state)) {
+    selectedState.value = state;
+    router.push(`/state/${selectedState.value}`);
+    emit("changeState", stateID[selectedState.value].key);
+  }
 };
 
 // shown options
 const shownOptions = ref(false);
+
+const closeOptions = () => {
+  shownOptions.value = false;
+};
 
 // selecter options with searching
 let searchState = ref("");
@@ -48,25 +61,37 @@ const stateOptions = computed(() => {
 </script>
 
 <template>
-  <div class="select">
+  <div class="select" v-on-click-outside="closeOptions">
     <div class="select__selected" @click="shownOptions = !shownOptions">
       <div>
-        <p v-if="!shownOptions">{{ stateID[selectedState]?.name }}</p>
+        <p v-if="!shownOptions">
+          {{ isState(selectedState) ? stateID[selectedState]?.name : "" }}
+        </p>
         <p v-else @click.stop>
           <input
             type="text"
             v-model="searchState"
-            :placeholder="stateID[selectedState]?.name"
+            :placeholder="
+              isState(selectedState) ? stateID[selectedState]?.name : ''
+            "
           />
         </p>
       </div>
       <div class="select__icon">
         <mdicon
           v-if="shownOptions && searchState.length"
+          @click.stop="searchState = ''"
           name="close"
-          size="22"
+          size="18"
           class="x-icon"
-        /><mdicon v-else name="arrowUp" size="22" class="arrow-icon" />
+        />
+        <div
+          v-else
+          class="arrow-icon"
+          :class="shownOptions ? 'arrow-icon__down' : ''"
+        >
+          <mdicon name="chevronUp" size="20" />
+        </div>
       </div>
     </div>
 
@@ -103,7 +128,9 @@ const stateOptions = computed(() => {
     max-height: 0;
     opacity: 0;
     transition: var(--transition-slow);
+    border-radius: var(--base-border-radius);
     overflow: hidden;
+    margin-top: 0.3rem;
 
     &::-webkit-scrollbar {
       width: 0.5rem;
@@ -111,6 +138,7 @@ const stateOptions = computed(() => {
 
     &::-webkit-scrollbar-thumb {
       background-color: var(--card-bg-contrast);
+      border-radius: var(--base-border-radius);
     }
   }
 
@@ -118,11 +146,12 @@ const stateOptions = computed(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-radius: var(--base-border-radius);
   }
 
   &__option,
   &__selected {
-    padding: 0.85rem 1rem;
+    padding: 0.75rem 1rem;
     background: var(--bg);
     cursor: pointer;
     transition: var(--transition-fast);
@@ -170,5 +199,13 @@ const stateOptions = computed(() => {
   max-height: 200px;
   opacity: 1;
   overflow-y: scroll;
+}
+
+.arrow-icon {
+  transition: transform 0.7s ease-in-out;
+
+  &__down {
+    transform: rotate(180deg);
+  }
 }
 </style>

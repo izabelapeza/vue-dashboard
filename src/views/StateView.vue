@@ -131,6 +131,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: var(--base-border-radius);
 }
 .selector-card {
   height: 4rem;
@@ -138,6 +139,6 @@ onMounted(() => {
   justify-content: right;
   padding: 0 1rem;
   align-items: flex-start;
-  padding-top: 1.2rem;
+  padding-top: 1.3rem;
 }
 </style>
