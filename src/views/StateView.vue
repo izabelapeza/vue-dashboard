@@ -43,42 +43,21 @@ const nonEnglishSpeakersRequest = () => {
     });
 };
 
-// background image
-const numPictures = ref(8);
-const imageUrl = ref("");
-
-const getImageUrl = () => {
-  const randomPicture = Math.floor(Math.random() * numPictures.value) + 1;
-  return new URL(`../assets/img/states/${randomPicture}.jpg`, import.meta.url)
-    .href;
-};
-
-let tempStyle = computed(() => {
-  return {
-    backgroundImage: `url(${imageUrl.value})`,
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "0% 50%",
-  };
-});
-
 // change state
 const changeState = (key: string) => {
   stateId.value = key;
   nonEnglishSpeakersRequest();
-  imageUrl.value = getImageUrl();
 };
 
 // on mounted
 onMounted(() => {
   getStateId();
   nonEnglishSpeakersRequest();
-  imageUrl.value = getImageUrl();
 });
 </script>
 
 <template>
-  <div class="card selector-card" :style="tempStyle">
+  <div class="card selector-card">
     <StateSelector @changeState="changeState" />
   </div>
   <div class="data-container">
@@ -140,5 +119,10 @@ onMounted(() => {
   padding: 0 1rem;
   align-items: flex-start;
   padding-top: 1.3rem;
+
+  background-image: url(../assets/img/nelson-ndongala-gDRHfyeOq58-unsplash.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0% 55%;
 }
 </style>
