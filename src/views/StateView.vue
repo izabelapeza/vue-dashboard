@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 // imports
 import axios from "axios";
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref } from "vue";
 import type { Ref } from "vue";
 import BarChart from "@/components/charts/BarChart.vue";
 import StateSelector from "@/components/layout/StatesSelector.vue";
 import { nonEnglishSpeakersFormat } from "@/utils/dataFormatter";
 import { useRoute } from "vue-router";
-import { stateID } from "@/utils/statesID";
+import { stateID, isState } from "@/utils/statesID";
 
 // state id
 const route = useRoute();
@@ -16,8 +16,7 @@ const stateId = ref("");
 
 const getStateId = () => {
   state = route.params.id;
-  if (typeof state === "string" && Object.keys(stateID).includes(state)) {
-    //@ts-ignore
+  if (typeof state === "string" && isState(state)) {
     stateId.value = stateID[state].key;
   }
 };

@@ -51,7 +51,7 @@ export const stateID = {
   WY: { key: "04000US56", name: "Wyoming" },
 };
 
-export const stateShortcut = [
+const stateShortcut = [
   "AL",
   "AK",
   "AZ",
@@ -103,3 +103,7 @@ export const stateShortcut = [
   "WI",
   "WY",
 ] as const;
+
+type State = typeof stateShortcut[number];
+
+export const isState = (x: any): x is State => stateShortcut.includes(x);

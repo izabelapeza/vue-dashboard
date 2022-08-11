@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // imports
-import { stateID, stateShortcut } from "@/utils/statesID";
+import { stateID, isState } from "@/utils/statesID";
 import { computed, ref, Ref } from "@vue/reactivity";
 import { onMounted, defineEmits } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -10,8 +10,6 @@ const route = useRoute();
 const router = useRouter();
 
 // selected state
-type State = typeof stateShortcut[number];
-const isState = (x: any): x is State => stateShortcut.includes(x);
 const selectedState: Ref<keyof typeof stateID | ""> = ref("");
 
 onMounted(() => {
