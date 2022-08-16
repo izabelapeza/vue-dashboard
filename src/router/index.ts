@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import AboutView from "../views/AboutView.vue";
+import MapView from "../views/MapView.vue";
 import StateView from "../views/StateView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "temp",
-    component: AboutView,
+    name: "map",
+    component: MapView,
   },
   {
     path: "/state/:id",
