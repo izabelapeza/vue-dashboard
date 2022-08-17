@@ -1,21 +1,59 @@
-import { onMounted } from 'vue';
 <script setup lang="ts">
 // imports
-import { onMounted } from "vue";
+import { onMounted, defineProps, watch } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+
+// props
+const props = defineProps({
+  isClickable: Boolean,
+  state: String,
+});
+
+// point at the state
+const pointState = () => {
+  let land = document.querySelector(`#US-${props.state}`);
+  land?.classList.add("pointed-state");
+};
+
+const removePointedState = () => {
+  let allLand = document.querySelectorAll(".land");
+  allLand.forEach((landElement) => {
+    landElement.classList.remove("pointed-state");
+  });
+};
+
+watch(
+  () => props.state,
+  () => {
+    removePointedState();
+    pointState();
+  }
+);
 
 // click temp
 const pushToState = (event: any) => {
   let stateID = event.path[0].id.split("-")[1];
   router.push({ path: `/state/${stateID}` });
 };
-onMounted(() => {
+
+const addClickableState = () => {
   let allLand = document.querySelectorAll(".land");
   allLand.forEach((landElement) => {
     landElement.addEventListener("click", pushToState);
+    landElement.classList.add("clickable-state");
   });
+};
+
+// on mounted
+onMounted(() => {
+  if (props.isClickable) {
+    addClickableState();
+  }
+  if (props.state) {
+    pointState();
+  }
 });
 </script>
 
@@ -346,10 +384,16 @@ onMounted(() => {
   stroke-opacity: 1;
   stroke-width: 0.5;
   transition: var(--transition-fast);
+}
 
+.clickable-state {
   &:hover {
     fill: var(--base-turquoise);
   }
+}
+
+.pointed-state {
+  fill: var(--base-turquoise);
 }
 
 svg {

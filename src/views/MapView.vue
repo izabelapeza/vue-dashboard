@@ -5,6 +5,6 @@ import MapUSA from "@/components/maps/MapUSA.vue";
 
 <template>
   <div class="card" style="height: 95vh; width: 100%">
-    <MapUSA />
+    <MapUSA :isClickable="true" />
   </div>
 </template>

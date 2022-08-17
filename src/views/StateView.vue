@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 // imports
 import axios from "axios";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import type { Ref } from "vue";
 import BarChart from "@/components/charts/BarChart.vue";
 import StateSelector from "@/components/layout/StatesSelector.vue";
 import { nonEnglishSpeakersFormat } from "@/utils/dataFormatter";
 import { useRoute } from "vue-router";
 import { stateID, isState } from "@/utils/statesID";
+import MapUSA from "@/components/maps/MapUSA.vue";
 
 // state id
 const route = useRoute();
@@ -20,6 +21,14 @@ const getStateId = () => {
     stateId.value = stateID[state].key;
   }
 };
+
+// state abbreviations
+const stateAbbre = computed(() => {
+  state = route.params.id;
+  if (typeof state === "string" && isState(state)) {
+    return state;
+  } else return "";
+});
 
 // non English speakers
 const nonEnglishSpeakersData: Ref<{
@@ -62,13 +71,16 @@ onMounted(() => {
   <div class="data-container">
     <div class="data-container card card1"></div>
     <div class="data-container card card2">
+      <MapUSA :isClickable="false" :state="stateAbbre" />
+    </div>
+    <div class="data-container card card3">
       <BarChart
         :data="nonEnglishSpeakersData"
         :chartTitle="'Non-English Speakers'"
       />
     </div>
-    <div class="data-container card card3"></div>
     <div class="data-container card card4"></div>
+    <div class="data-container card card5"></div>
   </div>
 </template>
 
@@ -81,9 +93,9 @@ onMounted(() => {
     grid-template-rows: repeat(3, 27vh);
 
     grid-template-areas:
-      "card1 card1"
-      "card2 card3"
-      "card2 card4";
+      "card1 card2"
+      "card3 card4"
+      "card3 card5";
 
     & .card1 {
       grid-area: card1;
