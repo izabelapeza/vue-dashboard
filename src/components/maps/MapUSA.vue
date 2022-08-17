@@ -18,10 +18,8 @@ const pointState = () => {
 };
 
 const removePointedState = () => {
-  let allLand = document.querySelectorAll(".land");
-  allLand.forEach((landElement) => {
-    landElement.classList.remove("pointed-state");
-  });
+  let landElement = document.querySelector(".pointed-state");
+  landElement?.classList.remove("pointed-state");
 };
 
 watch(
