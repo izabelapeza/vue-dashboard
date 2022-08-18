@@ -1,11 +1,7 @@
 <script lang="ts" setup>
 // imports
-import axios from "axios";
 import { onMounted, ref, computed } from "vue";
-import type { Ref } from "vue";
-import BarChart from "@/components/charts/BarChart.vue";
 import StateSelector from "@/components/layout/StatesSelector.vue";
-import { nonEnglishSpeakersFormat } from "@/utils/dataFormatter";
 import { useRoute } from "vue-router";
 import { stateID, isState } from "@/utils/statesID";
 import MapUSA from "@/components/maps/MapUSA.vue";
@@ -30,37 +26,14 @@ const stateAbbre = computed(() => {
   } else return "";
 });
 
-// non English speakers
-const nonEnglishSpeakersData: Ref<{
-  labels: string[];
-  datasets: { data: number[]; backgroundColor: string }[];
-} | null> = ref(null);
-
-const nonEnglishSpeakersRequest = () => {
-  axios
-    .get(
-      `https://datausa.io/api/data?Geography=${stateId.value}&measure=Languages%20Spoken&drilldowns=Language Spoken at Home`
-    )
-    .then((response) => {
-      nonEnglishSpeakersData.value = nonEnglishSpeakersFormat(
-        response.data["data"]
-      );
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-
 // change state
 const changeState = (key: string) => {
   stateId.value = key;
-  nonEnglishSpeakersRequest();
 };
 
 // on mounted
 onMounted(() => {
   getStateId();
-  nonEnglishSpeakersRequest();
 });
 </script>
 
@@ -73,12 +46,7 @@ onMounted(() => {
     <div class="data-container card card2">
       <MapUSA :isClickable="false" :state="stateAbbre" />
     </div>
-    <div class="data-container card card3">
-      <BarChart
-        :data="nonEnglishSpeakersData"
-        :chartTitle="'Non-English Speakers'"
-      />
-    </div>
+    <div class="data-container card card3"></div>
     <div class="data-container card card4"></div>
     <div class="data-container card card5"></div>
   </div>
