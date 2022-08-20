@@ -1,56 +1,44 @@
 <script setup lang="ts">
 // imports
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import type { Ref } from "vue";
 import MapUSA from "@/components/maps/MapUSA.vue";
 import BaseChart from "@/components/charts/BaseChart.vue";
 import DataServices from "@/services/dataService";
+import AdultObesityData from "@/types/AdultObesityData";
+import { barChart } from "@/utils/chartConfigs";
+
+// adult obesity
+let adultObesityLabels: Ref<string[]> = ref([]);
+let adultObesityData: Ref<number[]> = ref([]);
 
 DataServices.getAdultObesityData()
-  .then((response) => {
-    console.log(response.data);
+  .then((response: AdultObesityData) => {
+    let sortedData = response.data.data.sort((a, b) => {
+      return b["Adult Obesity"] - a["Adult Obesity"];
+    });
+    adultObesityLabels.value = sortedData.map((state) => {
+      return state.State;
+    });
+    adultObesityData.value = sortedData.map((state) => {
+      return state["Adult Obesity"];
+    });
   })
   .catch((error) => console.log(error));
 
-// temp
-// const adultObesityConfig = computed(() => {
-//   return {
-//     type: "bar",
-//     data: {
-//       labels: adultObesity?.labels,
-//       datasets: [
-//         {
-//           label: "My First dataset",
-//           backgroundColor: "rgb(255, 99, 132)",
-//           borderColor: "rgb(255, 99, 132)",
-//           data: adultObesity?.data,
-//         },
-//       ],
-//     },
-//     options: {
-//       indexAxis: "y",
-//       elements: {
-//         bar: {
-//           borderWidth: 2,
-//         },
-//       },
-//       responsive: true,
-//       plugins: {
-//         legend: {
-//           position: "right",
-//         },
-//         title: {
-//           display: true,
-//           text: "Chart.js Horizontal Bar Chart",
-//         },
-//       },
-//     },
-//   };
-// });
+const adultObesityConfig = computed(() => {
+  return barChart(
+    adultObesityLabels.value,
+    "Adult Obesity",
+    "#d83e96",
+    adultObesityData.value
+  );
+});
 </script>
 
 <template>
   <div class="card" style="height: 95vh; width: 100%">
     <MapUSA :isClickable="true" />
   </div>
-  <!-- <BaseChart :config="config" /> -->
+  <BaseChart :config="adultObesityConfig" />
 </template>
