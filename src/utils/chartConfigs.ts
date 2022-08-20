@@ -16,6 +16,8 @@ export const barChart = (
         },
       ],
     },
-    options: {},
+    options: {
+      responsive: true,
+    },
   };
 };

@@ -5,15 +5,21 @@ import type { Ref } from "vue";
 import MapUSA from "@/components/maps/MapUSA.vue";
 import BaseChart from "@/components/charts/BaseChart.vue";
 import DataServices from "@/services/dataService";
-import AdultObesityData from "@/types/AdultObesityData";
+import {
+  AdultObesityResponse,
+  DiabetesResponse,
+  AdultSmokingResponse,
+} from "@/types/ResponseData";
 import { barChart } from "@/utils/chartConfigs";
 
 // adult obesity
 let adultObesityLabels: Ref<string[]> = ref([]);
 let adultObesityData: Ref<number[]> = ref([]);
+let adultObesityLatestYear: Ref<number> = ref(0);
 
 DataServices.getAdultObesityData()
-  .then((response: AdultObesityData) => {
+  .then((response: AdultObesityResponse) => {
+    adultObesityLatestYear.value = response.data.data[0]["ID Year"];
     let sortedData = response.data.data.sort((a, b) => {
       return b["Adult Obesity"] - a["Adult Obesity"];
     });
@@ -29,16 +35,135 @@ DataServices.getAdultObesityData()
 const adultObesityConfig = computed(() => {
   return barChart(
     adultObesityLabels.value,
-    "Adult Obesity",
+    `Adult Obesity (${adultObesityLatestYear.value})`,
     "#d83e96",
     adultObesityData.value
+  );
+});
+
+// diabetes
+let diabetesLabels: Ref<string[]> = ref([]);
+let diabetesData: Ref<number[]> = ref([]);
+let diabetesLatestYear: Ref<number> = ref(0);
+
+DataServices.getDiabetesData()
+  .then((response: DiabetesResponse) => {
+    diabetesLatestYear.value = response.data.data[0]["ID Year"];
+    let sortedData = response.data.data.sort((a, b) => {
+      return b["Diabetes Prevalence"] - a["Diabetes Prevalence"];
+    });
+    diabetesLabels.value = sortedData.map((state) => {
+      return state.State;
+    });
+    diabetesData.value = sortedData.map((state) => {
+      return state["Diabetes Prevalence"];
+    });
+  })
+  .catch((error) => console.log(error));
+
+const diabetesConfig = computed(() => {
+  return barChart(
+    diabetesLabels.value,
+    `Diabetes (${diabetesLatestYear.value})`,
+    "#e2bf11",
+    diabetesData.value
+  );
+});
+
+// adult smoking
+let adultSmokingLabels: Ref<string[]> = ref([]);
+let adultSmokingData: Ref<number[]> = ref([]);
+let adultSmokingLatestYear: Ref<number> = ref(0);
+
+DataServices.getAdultSmokingData()
+  .then((response: AdultSmokingResponse) => {
+    adultSmokingLatestYear.value = response.data.data[0]["ID Year"];
+    let sortedData = response.data.data.sort((a, b) => {
+      return b["Adult Smoking"] - a["Adult Smoking"];
+    });
+    adultSmokingLabels.value = sortedData.map((state) => {
+      return state.State;
+    });
+    adultSmokingData.value = sortedData.map((state) => {
+      return state["Adult Smoking"];
+    });
+  })
+  .catch((error) => console.log(error));
+
+const adultSmokingConfig = computed(() => {
+  return barChart(
+    adultSmokingLabels.value,
+    `Adult Smoking (${adultSmokingLatestYear.value})`,
+    "#8122a7",
+    adultSmokingData.value
   );
 });
 </script>
 
 <template>
-  <div class="card" style="height: 95vh; width: 100%">
-    <MapUSA :isClickable="true" />
+  <div class="map-container">
+    <div class="card card1">
+      <MapUSA :isClickable="true" />
+    </div>
+    <div class="card card2">
+      <div class="map-chart">
+        <BaseChart :config="adultObesityConfig" :id="'obesity'" />
+      </div>
+    </div>
+    <div class="card card3">
+      <div class="map-chart">
+        <BaseChart :config="diabetesConfig" :id="'diabetes'" />
+      </div>
+    </div>
+    <div class="card card4">
+      <div class="map-chart">
+        <BaseChart :config="adultSmokingConfig" :id="'smoking'" />
+      </div>
+    </div>
   </div>
-  <BaseChart :config="adultObesityConfig" />
 </template>
+
+<style lang="scss">
+.map-container {
+  display: grid;
+
+  @media only screen and (min-width: 1020px) {
+    grid-template-columns: 60vw auto;
+    grid-template-rows: repeat(3, 29vh);
+
+    grid-template-areas:
+      "card1 card2"
+      "card1 card3"
+      "card1 card4";
+
+    & .card1 {
+      grid-area: card1;
+      height: 90vw;
+      height: 90vh;
+    }
+    & .card2 {
+      grid-area: card2;
+    }
+    & .card3 {
+      grid-area: card3;
+    }
+    & .card4 {
+      grid-area: card4;
+    }
+    .map-chart {
+      width: 27vw;
+    }
+  }
+
+  gap: 1rem;
+
+  .card1 {
+    height: 60vh;
+  }
+
+  .map-chart {
+    width: 90%;
+    padding: 1rem 0;
+  }
+}
+</style>
