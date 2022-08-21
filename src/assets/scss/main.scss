@@ -8,9 +8,9 @@
   font-family: "Noto Sans", sans-serif;
   --text-primary: #b6b6b6;
   --text-secondary: #ececec;
-  --bg: white;
+  --bg: #eeeeee;
   --text: #16161d;
-  --card-bg: #dfdfdf;
+  --card-bg: white;
   --card-bg-contrast: #23232e;
   --bg-primary: #23232e;
   --bg-secondary: #0f0f13;
@@ -22,6 +22,7 @@
   --base-yellow: #e2bf11;
   --base-turquoise: #32b1b6;
   --base-turquoise-light: #3fe5eb;
+  --tooltip-bg: #e2bf11d5;
   --transition-fast: 0.25s ease-in-out;
   --transition-slow: 0.4s ease-in-out;
   --base-border-radius: 4px;

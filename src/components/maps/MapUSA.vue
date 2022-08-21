@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // imports
-import { onMounted, defineProps, watch } from "vue";
+import { onMounted, defineProps, watch, defineEmits } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -10,6 +10,11 @@ const props = defineProps({
   isClickable: Boolean,
   state: String,
 });
+
+// emits
+const emit = defineEmits<{
+  (event: "emitMouseoverState", state: string | null): void;
+}>();
 
 // point at the state
 const pointState = () => {
@@ -40,6 +45,12 @@ const addClickableState = () => {
   let allLand = document.querySelectorAll(".land");
   allLand.forEach((landElement) => {
     landElement.addEventListener("click", pushToState);
+    landElement.addEventListener("mouseout", (event: any) => {
+      emit("emitMouseoverState", null);
+    });
+    landElement.addEventListener("mouseover", (event: any) => {
+      emit("emitMouseoverState", event.path[0].id.split("-")[1]);
+    });
     landElement.classList.add("clickable-state");
   });
 };
@@ -387,6 +398,7 @@ onMounted(() => {
 .clickable-state {
   &:hover {
     fill: var(--base-turquoise);
+    cursor: pointer;
   }
 }
 

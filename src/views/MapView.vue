@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // imports
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import type { Ref } from "vue";
 import MapUSA from "@/components/maps/MapUSA.vue";
 import BaseChart from "@/components/charts/BaseChart.vue";
@@ -11,6 +11,7 @@ import {
   AdultSmokingResponse,
 } from "@/types/ResponseData";
 import { barChart } from "@/utils/chartConfigs";
+import { stateID, isState } from "@/utils/statesID";
 
 // adult obesity
 let adultObesityLabels: Ref<string[]> = ref([]);
@@ -98,24 +99,56 @@ const adultSmokingConfig = computed(() => {
     adultSmokingData.value
   );
 });
+
+// add tooltip to map (with mouseover state)
+const mouseoverState: Ref<string | null> = ref(null);
+
+const getMouseoverState = (state: string | null) => {
+  if (state) {
+    if (typeof state === "string" && isState(state)) {
+      mouseoverState.value = stateID[state].name;
+    }
+  } else mouseoverState.value = state;
+};
+
+const mousemoved = (event: any) => {
+  var state = document.querySelector(".map-hover") as HTMLElement;
+  if (state) {
+    state.style.top = event.pageY + state.scrollTop - 24 + "px";
+    state.style.left = event.pageX - 80 + "px";
+  }
+};
+
+onMounted(() => {
+  document
+    ?.querySelector(".map-container")
+    ?.addEventListener("mousemove", mousemoved);
+});
 </script>
 
 <template>
   <div class="map-container">
     <div class="card card1">
-      <MapUSA :isClickable="true" />
+      <MapUSA :isClickable="true" @emitMouseoverState="getMouseoverState" />
+      <div
+        class="map-hover"
+        :class="mouseoverState ? 'map-hover__visible' : ''"
+      >
+        {{ mouseoverState }}
+      </div>
     </div>
-    <div class="card card2">
+    <div class="card card2"></div>
+    <div class="card card3">
       <div class="map-chart">
         <BaseChart :config="adultObesityConfig" :id="'obesity'" />
       </div>
     </div>
-    <div class="card card3">
+    <div class="card card4">
       <div class="map-chart">
         <BaseChart :config="diabetesConfig" :id="'diabetes'" />
       </div>
     </div>
-    <div class="card card4">
+    <div class="card card5">
       <div class="map-chart">
         <BaseChart :config="adultSmokingConfig" :id="'smoking'" />
       </div>
@@ -125,6 +158,7 @@ const adultSmokingConfig = computed(() => {
 
 <style lang="scss">
 .map-container {
+  position: relative;
   display: grid;
 
   @media only screen and (min-width: 1020px) {
@@ -132,13 +166,12 @@ const adultSmokingConfig = computed(() => {
     grid-template-rows: repeat(3, 29vh);
 
     grid-template-areas:
-      "card1 card2"
       "card1 card3"
-      "card1 card4";
+      "card1 card4"
+      "card2 card5";
 
     & .card1 {
       grid-area: card1;
-      height: 90vw;
       height: 90vh;
     }
     & .card2 {
@@ -149,6 +182,9 @@ const adultSmokingConfig = computed(() => {
     }
     & .card4 {
       grid-area: card4;
+    }
+    & .card5 {
+      grid-area: card5;
     }
     .map-chart {
       width: 27vw;
@@ -164,6 +200,18 @@ const adultSmokingConfig = computed(() => {
   .map-chart {
     width: 90%;
     padding: 1rem 0;
+  }
+}
+
+.map-hover {
+  background-color: var(--tooltip-bg);
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.2rem;
+  position: absolute;
+  display: none;
+
+  &__visible {
+    display: block;
   }
 }
 </style>

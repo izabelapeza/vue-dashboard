@@ -19,9 +19,9 @@ const changeTheme = () => {
     root.style.setProperty("--card-bg", "#23232e");
     root.style.setProperty("--card-bg-contrast", "#dfdfdf");
   } else {
-    root.style.setProperty("--bg", "white");
+    root.style.setProperty("--bg", "#eeeeee");
     root.style.setProperty("--text", "#16161d");
-    root.style.setProperty("--card-bg", "#dfdfdf");
+    root.style.setProperty("--card-bg", "white");
     root.style.setProperty("--card-bg-contrast", "#23232e");
   }
   localStorage.setItem("darkMode", `${darkMode.value}`);
