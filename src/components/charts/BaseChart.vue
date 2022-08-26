@@ -12,7 +12,7 @@ const props = defineProps<{
       labels: string[];
       datasets: {
         label: string;
-        backgroundColor: string;
+        backgroundColor: string | string[];
         data: number[];
       }[];
     };

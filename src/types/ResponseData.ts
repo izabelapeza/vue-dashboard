@@ -116,3 +116,25 @@ export interface AdultSmokingResponse {
   config: Config;
   request: string;
 }
+
+// adults who haven't seen a doctor in the past 12 months due to cost
+interface HaventSeenDoctorData {
+  data: {
+    "Adults Who Haven't Seen a Doctor in the Past 12 Months Due to Cost": number;
+    "ID Nation": string;
+    "ID Year": number;
+    Nation: string;
+    "Slug Nation": string;
+    Year: string;
+  }[];
+  source: Source[];
+}
+
+export interface HaventSeenDoctorResponse {
+  data: HaventSeenDoctorData;
+  status: number;
+  statusText: string;
+  headers: Headers;
+  config: Config;
+  request: string;
+}

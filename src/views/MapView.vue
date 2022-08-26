@@ -9,8 +9,9 @@ import {
   AdultObesityResponse,
   DiabetesResponse,
   AdultSmokingResponse,
+  HaventSeenDoctorResponse,
 } from "@/types/ResponseData";
-import { barChart } from "@/utils/chartConfigs";
+import { barChart, doughnutChart } from "@/utils/chartConfigs";
 import { stateID, isState } from "@/utils/statesID";
 
 // adult obesity
@@ -100,6 +101,33 @@ const adultSmokingConfig = computed(() => {
   );
 });
 
+// adults who haven't seen a doctor in the past 12 months due to cost
+let seenDoctorLabels: Ref<string[]> = ref([]);
+let seenDoctorData: Ref<number[]> = ref([]);
+let seenDoctorLatestYear: Ref<number> = ref(0);
+
+DataServices.getHaventSeenDoctor()
+  .then((response: HaventSeenDoctorResponse) => {
+    0;
+    seenDoctorLatestYear.value = response.data.data[0]["ID Year"];
+    seenDoctorLabels.value = ["Adults", "Other"];
+    let adultNumber =
+      response.data.data[0][
+        "Adults Who Haven't Seen a Doctor in the Past 12 Months Due to Cost"
+      ];
+    seenDoctorData.value = [adultNumber, 100 - adultNumber];
+  })
+  .catch((error) => console.log(error));
+
+const seenDoctorConfig = computed(() => {
+  return doughnutChart(
+    seenDoctorLabels.value,
+    "Temp",
+    ["#8122a7", "#888"],
+    seenDoctorData.value
+  );
+});
+
 // add tooltip to map (with mouseover state)
 const mouseoverState: Ref<string | null> = ref(null);
 
@@ -137,7 +165,19 @@ onMounted(() => {
         {{ mouseoverState }}
       </div>
     </div>
-    <div class="card card2"></div>
+    <div class="card card2">
+      <div class="doughnuts-contener">
+        <div class="doughnut-contener">
+          <BaseChart :config="seenDoctorConfig" :id="'seen-doctor-1'" />
+        </div>
+        <div class="doughnut-contener">
+          <BaseChart :config="seenDoctorConfig" :id="'seen-doctor-2'" />
+        </div>
+        <div class="doughnut-contener">
+          <BaseChart :config="seenDoctorConfig" :id="'seen-doctor-3'" />
+        </div>
+      </div>
+    </div>
     <div class="card card3">
       <div class="map-chart">
         <BaseChart :config="adultObesityConfig" :id="'obesity'" />
@@ -161,9 +201,9 @@ onMounted(() => {
   position: relative;
   display: grid;
 
-  @media only screen and (min-width: 1020px) {
+  @media only screen and (min-width: 1120px) {
     grid-template-columns: 60vw auto;
-    grid-template-rows: repeat(3, 29vh);
+    grid-template-rows: repeat(3, 30vh);
 
     grid-template-areas:
       "card1 card3"
@@ -189,12 +229,17 @@ onMounted(() => {
     .map-chart {
       width: 27vw;
     }
+
+    .doughnut-contener {
+      height: 13vw;
+      width: 13vw;
+    }
   }
 
   gap: 1rem;
 
   .card1 {
-    height: 60vh;
+    height: 62vh;
   }
 
   .map-chart {
@@ -213,5 +258,20 @@ onMounted(() => {
   &__visible {
     display: block;
   }
+}
+
+.doughnuts-contener {
+  display: flex;
+  min-height: 30vh;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 3vw;
+}
+
+.doughnut-contener {
+  position: relative;
+  height: 20vw;
+  width: 20vw;
 }
 </style>
