@@ -9,7 +9,8 @@ import {
   AdultObesityResponse,
   DiabetesResponse,
   AdultSmokingResponse,
-  HaventSeenDoctorResponse,
+  DrugOverdoseResponse,
+  OpioidOverdoseResponse,
 } from "@/types/ResponseData";
 import { barChart, doughnutChart } from "@/utils/chartConfigs";
 import { stateID, isState } from "@/utils/statesID";
@@ -101,30 +102,61 @@ const adultSmokingConfig = computed(() => {
   );
 });
 
-// adults who haven't seen a doctor in the past 12 months due to cost
-let seenDoctorLabels: Ref<string[]> = ref([]);
-let seenDoctorData: Ref<number[]> = ref([]);
-let seenDoctorLatestYear: Ref<number> = ref(0);
+// drug overdose reath rate
+let drugOverdoseLabels: Ref<string[]> = ref([]);
+let drugOverdoseData: Ref<number[]> = ref([]);
+let drugOverdoseLatestYear: Ref<number> = ref(0);
 
-DataServices.getHaventSeenDoctor()
-  .then((response: HaventSeenDoctorResponse) => {
-    0;
-    seenDoctorLatestYear.value = response.data.data[0]["ID Year"];
-    seenDoctorLabels.value = ["Adults", "Other"];
+DataServices.getDrugOverdose()
+  .then((response: DrugOverdoseResponse) => {
+    drugOverdoseLatestYear.value = response.data.data[0]["ID Year"];
+    drugOverdoseLabels.value = [
+      `Drug Overdose Death Rate (${drugOverdoseLatestYear.value})`,
+      "Other",
+    ];
     let adultNumber =
       response.data.data[0][
-        "Adults Who Haven't Seen a Doctor in the Past 12 Months Due to Cost"
+        "Drug Overdose Death Rate Per 100,000 Age-Adjusted"
       ];
-    seenDoctorData.value = [adultNumber, 100 - adultNumber];
+    drugOverdoseData.value = [adultNumber, 100 - adultNumber];
   })
   .catch((error) => console.log(error));
 
-const seenDoctorConfig = computed(() => {
+const drugOverdoseConfig = computed(() => {
   return doughnutChart(
-    seenDoctorLabels.value,
-    "Temp",
-    ["#8122a7", "#888"],
-    seenDoctorData.value
+    drugOverdoseLabels.value,
+    "",
+    ["#8122a7", "#c7c7c777"],
+    drugOverdoseData.value
+  );
+});
+
+// opioid overdose reath rate
+let opioidOverdoseLabels: Ref<string[]> = ref([]);
+let opioidOverdoseData: Ref<number[]> = ref([]);
+let opioidOverdoseLatestYear: Ref<number> = ref(0);
+
+DataServices.getOpioidOverdose()
+  .then((response: OpioidOverdoseResponse) => {
+    opioidOverdoseLatestYear.value = response.data.data[0]["ID Year"];
+    opioidOverdoseLabels.value = [
+      `Opioid Overdose Death Rate (${opioidOverdoseLatestYear.value})`,
+      "Other",
+    ];
+    let adultNumber =
+      response.data.data[0][
+        "Opioid Overdose Death Rate Per 100,000 Age-Adjusted"
+      ];
+    opioidOverdoseData.value = [adultNumber, 100 - adultNumber];
+  })
+  .catch((error) => console.log(error));
+
+const opioidOverdoseConfig = computed(() => {
+  return doughnutChart(
+    opioidOverdoseLabels.value,
+    "",
+    ["#e2bf11", "#c7c7c777"],
+    opioidOverdoseData.value
   );
 });
 
@@ -166,29 +198,26 @@ onMounted(() => {
       </div>
     </div>
     <div class="card card2">
-      <div class="doughnuts-contener">
-        <div class="doughnut-contener">
-          <BaseChart :config="seenDoctorConfig" :id="'seen-doctor-1'" />
-        </div>
-        <div class="doughnut-contener">
-          <BaseChart :config="seenDoctorConfig" :id="'seen-doctor-2'" />
-        </div>
-        <div class="doughnut-contener">
-          <BaseChart :config="seenDoctorConfig" :id="'seen-doctor-3'" />
-        </div>
+      <div class="doughnut-contener">
+        <BaseChart :config="drugOverdoseConfig" :id="'drug-overdose'" />
       </div>
     </div>
     <div class="card card3">
-      <div class="map-chart">
-        <BaseChart :config="adultObesityConfig" :id="'obesity'" />
+      <div class="doughnut-contener">
+        <BaseChart :config="opioidOverdoseConfig" :id="'opioid-overdose'" />
       </div>
     </div>
     <div class="card card4">
       <div class="map-chart">
-        <BaseChart :config="diabetesConfig" :id="'diabetes'" />
+        <BaseChart :config="adultObesityConfig" :id="'obesity'" />
       </div>
     </div>
     <div class="card card5">
+      <div class="map-chart">
+        <BaseChart :config="diabetesConfig" :id="'diabetes'" />
+      </div>
+    </div>
+    <div class="card card6">
       <div class="map-chart">
         <BaseChart :config="adultSmokingConfig" :id="'smoking'" />
       </div>
@@ -202,13 +231,13 @@ onMounted(() => {
   display: grid;
 
   @media only screen and (min-width: 1120px) {
-    grid-template-columns: 60vw auto;
+    grid-template-columns: 30vw 30vw auto;
     grid-template-rows: repeat(3, 30vh);
 
     grid-template-areas:
-      "card1 card3"
-      "card1 card4"
-      "card2 card5";
+      "card1 card1 card4"
+      "card1 card1 card5"
+      "card2 card3 card6";
 
     & .card1 {
       grid-area: card1;
@@ -226,13 +255,11 @@ onMounted(() => {
     & .card5 {
       grid-area: card5;
     }
+    & .card6 {
+      grid-area: card6;
+    }
     .map-chart {
       width: 27vw;
-    }
-
-    .doughnut-contener {
-      height: 13vw;
-      width: 13vw;
     }
   }
 
@@ -260,18 +287,10 @@ onMounted(() => {
   }
 }
 
-.doughnuts-contener {
-  display: flex;
-  min-height: 30vh;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  gap: 3vw;
-}
-
 .doughnut-contener {
   position: relative;
-  height: 20vw;
-  width: 20vw;
+  height: 240px;
+  width: 240px;
+  padding: 1rem;
 }
 </style>

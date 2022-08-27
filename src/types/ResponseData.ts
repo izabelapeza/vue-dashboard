@@ -117,10 +117,10 @@ export interface AdultSmokingResponse {
   request: string;
 }
 
-// adults who haven't seen a doctor in the past 12 months due to cost
-interface HaventSeenDoctorData {
+// drug overdose reath rate
+interface DrugOverdoseData {
   data: {
-    "Adults Who Haven't Seen a Doctor in the Past 12 Months Due to Cost": number;
+    "Drug Overdose Death Rate Per 100,000 Age-Adjusted": number;
     "ID Nation": string;
     "ID Year": number;
     Nation: string;
@@ -130,8 +130,30 @@ interface HaventSeenDoctorData {
   source: Source[];
 }
 
-export interface HaventSeenDoctorResponse {
-  data: HaventSeenDoctorData;
+export interface DrugOverdoseResponse {
+  data: DrugOverdoseData;
+  status: number;
+  statusText: string;
+  headers: Headers;
+  config: Config;
+  request: string;
+}
+
+// opioid overdose reath rate
+interface OpioidOverdoseData {
+  data: {
+    "Opioid Overdose Death Rate Per 100,000 Age-Adjusted": number;
+    "ID Nation": string;
+    "ID Year": number;
+    Nation: string;
+    "Slug Nation": string;
+    Year: string;
+  }[];
+  source: Source[];
+}
+
+export interface OpioidOverdoseResponse {
+  data: OpioidOverdoseData;
   status: number;
   statusText: string;
   headers: Headers;

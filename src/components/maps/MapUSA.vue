@@ -387,7 +387,7 @@ onMounted(() => {
 
 <style lang="scss">
 .land {
-  fill: var(--card-bg-contrast);
+  fill: var(--bg-map);
   fill-opacity: 1;
   stroke: var(--card-bg);
   stroke-opacity: 1;

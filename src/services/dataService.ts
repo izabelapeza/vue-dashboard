@@ -12,9 +12,14 @@ class DataService {
   getAdultSmokingData(): Promise<any> {
     return http.get("?drilldowns=State&measure=Adult Smoking&year=latest");
   }
-  getHaventSeenDoctor(): Promise<any> {
+  getDrugOverdose(): Promise<any> {
     return http.get(
-      "?drilldowns=Nation&measures=Adults Who Haven't Seen a Doctor in the Past 12 Months Due to Cost&year=latest"
+      "?drilldowns=Nation&measures=Drug%20Overdose%20Death%20Rate%20Per%20100,000%20Age-Adjusted&year=latest"
+    );
+  }
+  getOpioidOverdose(): Promise<any> {
+    return http.get(
+      "?drilldowns=Nation&measures=Opioid%20Overdose%20Death%20Rate%20Per%20100,000%20Age-Adjusted&year=latest"
     );
   }
 }
