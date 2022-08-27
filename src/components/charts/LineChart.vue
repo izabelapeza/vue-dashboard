@@ -12,6 +12,11 @@ import {
   AdultSmokingResponse,
   AdultSmokingData,
 } from "@/types/ResponseData";
+import useGlobalLoader from "@/utils/useGlobalLoader";
+import useGlobalErrorDialog from "@/utils/useGlobalErrorDialog";
+
+let { setGlobalLoader } = useGlobalLoader();
+let { setGlobalErrorDialog } = useGlobalErrorDialog();
 
 // props
 const props = defineProps<{
@@ -33,11 +38,20 @@ const yearsLabels = [
 // adult obesity
 let adultObesityData: Ref<ObesityData["data"]> = ref([]);
 
-DataServices.getAdultObesityData()
-  .then((response: AdultObesityResponse) => {
-    adultObesityData.value = response.data.data;
-  })
-  .catch((error) => console.log(error));
+const getAdultObesityData = () => {
+  setGlobalLoader(true);
+  DataServices.getAdultObesityData()
+    .then((response: AdultObesityResponse) => {
+      setGlobalLoader(false);
+      adultObesityData.value = response.data.data;
+    })
+    .catch((error) => {
+      setGlobalLoader(false);
+      setGlobalErrorDialog(error);
+    });
+};
+
+getAdultObesityData();
 
 const stateAdultObesityData = computed(() => {
   let data: number[] = [];
@@ -57,11 +71,20 @@ const stateAdultObesityData = computed(() => {
 // diabetes
 let diabetesData: Ref<DiabetesData["data"]> = ref([]);
 
-DataServices.getDiabetesData()
-  .then((response: DiabetesResponse) => {
-    diabetesData.value = response.data.data;
-  })
-  .catch((error) => console.log(error));
+const getDiabetesData = () => {
+  setGlobalLoader(true);
+  DataServices.getDiabetesData()
+    .then((response: DiabetesResponse) => {
+      setGlobalLoader(false);
+      diabetesData.value = response.data.data;
+    })
+    .catch((error) => {
+      setGlobalLoader(false);
+      setGlobalErrorDialog(error);
+    });
+};
+
+getDiabetesData();
 
 const stateDiabetesData = computed(() => {
   let data: number[] = [];
@@ -81,11 +104,20 @@ const stateDiabetesData = computed(() => {
 // adult smoking
 let adultSmokingData: Ref<AdultSmokingData["data"]> = ref([]);
 
-DataServices.getAdultSmokingData()
-  .then((response: AdultSmokingResponse) => {
-    adultSmokingData.value = response.data.data;
-  })
-  .catch((error) => console.log(error));
+const getAdultSmokingData = () => {
+  setGlobalLoader(true);
+  DataServices.getAdultSmokingData()
+    .then((response: AdultSmokingResponse) => {
+      adultSmokingData.value = response.data.data;
+      setGlobalLoader(false);
+    })
+    .catch((error) => {
+      setGlobalLoader(false);
+      setGlobalErrorDialog(error);
+    });
+};
+
+getAdultSmokingData();
 
 const stateAdultSmokingData = computed(() => {
   let data: number[] = [];
