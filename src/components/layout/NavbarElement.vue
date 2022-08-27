@@ -2,6 +2,9 @@
 // imports
 import { ref, onMounted } from "vue";
 import ChangeThemeButton from "@/components/layout/ChangeThemeButton.vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 // dark and light mode
 const darkMode = "weatherNight";
@@ -27,7 +30,11 @@ const changeTheme = (isDarkMode: boolean) => {
         <mdicon name="mapSearch" size="46" class="navbar__icon top-icon" />
         <span class="text">US Map</span>
       </router-link>
-      <router-link to="/state/NY" class="navbar__item">
+      <router-link
+        to="/state/NY"
+        class="navbar__item"
+        :class="route.name === 'state' ? 'active' : ''"
+      >
         <mdicon name="starCircle" size="46" class="navbar__icon top-icon" />
         <span class="text">State</span>
       </router-link>
