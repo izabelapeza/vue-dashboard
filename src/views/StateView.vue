@@ -5,6 +5,7 @@ import StateSelector from "@/components/layout/StatesSelector.vue";
 import { useRoute } from "vue-router";
 import { stateID, isState } from "@/utils/statesID";
 import MapUSA from "@/components/maps/MapUSA.vue";
+import LineChart from "@/components/charts/LineChart.vue";
 
 // state id
 const route = useRoute();
@@ -42,7 +43,9 @@ onMounted(() => {
     <StateSelector @changeState="changeState" />
   </div>
   <div class="data-container">
-    <div class="data-container card card1"></div>
+    <div class="data-container card card1" style="padding: 1rem">
+      <LineChart :state="stateId" />
+    </div>
     <div class="data-container card card2">
       <MapUSA :isClickable="false" :state="stateAbbre" />
     </div>
@@ -57,12 +60,12 @@ onMounted(() => {
   display: grid;
 
   @media only screen and (min-width: 600px) {
-    grid-template-columns: repeat(2, auto);
+    grid-template-columns: 50vw auto;
     grid-template-rows: repeat(3, 27vh);
 
     grid-template-areas:
       "card1 card2"
-      "card3 card4"
+      "card1 card4"
       "card3 card5";
 
     & .card1 {

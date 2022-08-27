@@ -52,7 +52,7 @@ interface Config {
 }
 
 // obesity
-interface ObesityData {
+export interface ObesityData {
   data: {
     "ID State": string;
     State: string;
@@ -74,7 +74,7 @@ export interface AdultObesityResponse {
 }
 
 // diabetes
-interface DiabetesData {
+export interface DiabetesData {
   data: {
     "ID State": string;
     State: string;
@@ -96,7 +96,7 @@ export interface DiabetesResponse {
 }
 
 // adult smoking
-interface AdultSmokingData {
+export interface AdultSmokingData {
   data: {
     "ID State": string;
     State: string;

@@ -20,7 +20,7 @@ let adultObesityLabels: Ref<string[]> = ref([]);
 let adultObesityData: Ref<number[]> = ref([]);
 let adultObesityLatestYear: Ref<number> = ref(0);
 
-DataServices.getAdultObesityData()
+DataServices.getAdultObesityData("latest")
   .then((response: AdultObesityResponse) => {
     adultObesityLatestYear.value = response.data.data[0]["ID Year"];
     let sortedData = response.data.data.sort((a, b) => {
@@ -49,7 +49,7 @@ let diabetesLabels: Ref<string[]> = ref([]);
 let diabetesData: Ref<number[]> = ref([]);
 let diabetesLatestYear: Ref<number> = ref(0);
 
-DataServices.getDiabetesData()
+DataServices.getDiabetesData("latest")
   .then((response: DiabetesResponse) => {
     diabetesLatestYear.value = response.data.data[0]["ID Year"];
     let sortedData = response.data.data.sort((a, b) => {
@@ -78,7 +78,7 @@ let adultSmokingLabels: Ref<string[]> = ref([]);
 let adultSmokingData: Ref<number[]> = ref([]);
 let adultSmokingLatestYear: Ref<number> = ref(0);
 
-DataServices.getAdultSmokingData()
+DataServices.getAdultSmokingData("latest")
   .then((response: AdultSmokingResponse) => {
     adultSmokingLatestYear.value = response.data.data[0]["ID Year"];
     let sortedData = response.data.data.sort((a, b) => {

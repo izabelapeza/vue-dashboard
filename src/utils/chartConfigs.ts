@@ -46,3 +46,24 @@ export const doughnutChart = (
     },
   };
 };
+
+export const lineChart = (
+  labels: string[],
+  datasets: {
+    label: string;
+    data: number[];
+    borderColor: string;
+    backgroundColor: string;
+  }[]
+) => {
+  return {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: datasets,
+    },
+    options: {
+      responsive: true,
+    },
+  };
+};

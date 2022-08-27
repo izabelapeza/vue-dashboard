@@ -1,16 +1,16 @@
 import http from "@/http-common";
 
 class DataService {
-  getAdultObesityData(): Promise<any> {
-    return http.get("?drilldowns=State&measure=Adult Obesity&year=latest");
+  getAdultObesityData(year = ""): Promise<any> {
+    return http.get(`?drilldowns=State&measure=Adult Obesity&year=${year}`);
   }
-  getDiabetesData(): Promise<any> {
+  getDiabetesData(year = ""): Promise<any> {
     return http.get(
-      "?drilldowns=State&measure=Diabetes Prevalence&year=latest"
+      `?drilldowns=State&measure=Diabetes Prevalence&year=${year}`
     );
   }
-  getAdultSmokingData(): Promise<any> {
-    return http.get("?drilldowns=State&measure=Adult Smoking&year=latest");
+  getAdultSmokingData(year = ""): Promise<any> {
+    return http.get(`?drilldowns=State&measure=Adult Smoking&year=${year}`);
   }
   getDrugOverdose(): Promise<any> {
     return http.get(
