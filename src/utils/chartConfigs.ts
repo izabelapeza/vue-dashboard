@@ -22,6 +22,27 @@ export const barChart = (
   };
 };
 
+export const pluralBarChart = (
+  labels: string[],
+  datasets: {
+    label: string;
+    data: number[];
+    borderColor: string;
+    backgroundColor: string;
+  }[]
+) => {
+  return {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: datasets,
+    },
+    options: {
+      responsive: true,
+    },
+  };
+};
+
 export const doughnutChart = (
   labels: string[],
   label: string,

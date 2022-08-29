@@ -6,6 +6,7 @@ import { useRoute } from "vue-router";
 import { stateID, isState } from "@/utils/statesID";
 import MapUSA from "@/components/maps/MapUSA.vue";
 import LineChart from "@/components/charts/LineChart.vue";
+import PluralBarChart from "@/components/charts/PluralBarChart.vue";
 
 // state id
 const route = useRoute();
@@ -43,15 +44,21 @@ onMounted(() => {
     <StateSelector @changeState="changeState" />
   </div>
   <div class="data-container">
-    <div class="data-container card card1" style="padding: 1rem">
-      <LineChart :state="stateId" />
+    <div class="card card1">
+      <div class="inside-card">
+        <LineChart :state="stateId" />
+      </div>
     </div>
-    <div class="data-container card card2">
+    <div class="card card2">
       <MapUSA :isClickable="false" :state="stateAbbre" />
     </div>
-    <div class="data-container card card3"></div>
-    <div class="data-container card card4"></div>
-    <div class="data-container card card5"></div>
+    <div class="card card3">Violent Crimes per 100,000 People</div>
+    <div class="card card4">Homicides per 100,000 People</div>
+    <div class="card card5">
+      <div class="inside-card">
+        <PluralBarChart :state="stateId" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -59,14 +66,15 @@ onMounted(() => {
 .data-container {
   display: grid;
 
-  @media only screen and (min-width: 600px) {
-    grid-template-columns: 50vw auto;
-    grid-template-rows: repeat(3, 27vh);
+  @media only screen and (min-width: 1120px) {
+    grid-template-columns: 27vw 27vw auto;
+    grid-template-rows: repeat(4, 19.5vh);
 
     grid-template-areas:
-      "card1 card2"
-      "card1 card4"
-      "card3 card5";
+      "card1 card1 card2"
+      "card1 card1 card2"
+      "card1 card1 card5"
+      "card3 card4 card5";
 
     & .card1 {
       grid-area: card1;
@@ -80,10 +88,13 @@ onMounted(() => {
     & .card4 {
       grid-area: card4;
     }
+    & .card5 {
+      grid-area: card5;
+    }
   }
 
-  grid-template-columns: 1fr;
-  grid-template-rows: repeat(4, 27vh);
+  grid-template-columns: calc(100vw - 7.5rem);
+  grid-template-rows: 47vw 30vw repeat(2, 32vh) 47vw;
 
   gap: 1rem;
 }
@@ -106,5 +117,8 @@ onMounted(() => {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0% 55%;
+}
+.inside-card {
+  width: 95%;
 }
 </style>

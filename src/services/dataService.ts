@@ -22,6 +22,15 @@ class DataService {
       "?drilldowns=Nation&measures=Opioid%20Overdose%20Death%20Rate%20Per%20100,000%20Age-Adjusted&year=latest"
     );
   }
+  getExcessiveDrinking(): Promise<any> {
+    return http.get("?drilldowns=State&measures=Excessive%20Drinking");
+  }
+  getViolentCrime(year = ""): Promise<any> {
+    return http.get(`?drilldowns=State&measure=Violent%20Crime&year=${year}`);
+  }
+  getHomicides(year = ""): Promise<any> {
+    return http.get(`?drilldowns=State&measure=Homicides&year=${year}`);
+  }
 }
 
 export default new DataService();

@@ -160,3 +160,68 @@ export interface OpioidOverdoseResponse {
   config: Config;
   request: string;
 }
+
+// excessive drinking
+export interface ExcessiveDrinkingData {
+  data: {
+    "Excessive Drinking": number;
+    "ID State": string;
+    "ID Year": number;
+    "Slug Nation": string;
+    Year: string;
+  }[];
+  source: Source[];
+}
+
+export interface ExcessiveDrinkingResponse {
+  data: ExcessiveDrinkingData;
+  status: number;
+  statusText: string;
+  headers: Headers;
+  config: Config;
+  request: string;
+}
+
+// violent crime
+export interface ViolentCrimeData {
+  data: {
+    "Violent Crime": number;
+    "ID State": string;
+    State: string;
+    "Slug Nation": string;
+    "ID Year": number;
+    Year: string;
+  }[];
+  source: Source[];
+}
+
+export interface ViolentCrimeResponse {
+  data: ViolentCrimeData;
+  status: number;
+  statusText: string;
+  headers: Headers;
+  config: Config;
+  request: string;
+}
+
+// homicides
+export interface HomicidesData {
+  data: {
+    Homicides: number;
+    "ID State": string;
+    State: string;
+    "Slug Nation": string;
+    "ID Year": number;
+    Year: string;
+  }[];
+  source: Source[];
+}
+
+export interface HomicidesResponse {
+  data: HomicidesData;
+  status: number;
+  statusText: string;
+  headers: Headers;
+  config: Config;
+  request: string;
+}
