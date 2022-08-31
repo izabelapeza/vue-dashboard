@@ -7,10 +7,6 @@ import DataServices from "@/services/dataService";
 import {
   ExcessiveDrinkingResponse,
   ExcessiveDrinkingData,
-  ViolentCrimeResponse,
-  ViolentCrimeData,
-  HomicidesResponse,
-  HomicidesData,
 } from "@/types/ResponseData";
 import useGlobalLoader from "@/utils/useGlobalLoader";
 import useGlobalErrorDialog from "@/utils/useGlobalErrorDialog";

@@ -1,12 +1,26 @@
 <script lang="ts" setup>
 // imports
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
+import type { Ref } from "vue";
 import StateSelector from "@/components/layout/StatesSelector.vue";
 import { useRoute } from "vue-router";
 import { stateID, isState } from "@/utils/statesID";
 import MapUSA from "@/components/maps/MapUSA.vue";
 import LineChart from "@/components/charts/LineChart.vue";
 import PluralBarChart from "@/components/charts/PluralBarChart.vue";
+import CountingAnimation from "@/components/layout/CountingAnimation.vue";
+import DataServices from "@/services/dataService";
+import {
+  ViolentCrimeResponse,
+  ViolentCrimeData,
+  HomicidesResponse,
+  HomicidesData,
+} from "@/types/ResponseData";
+import useGlobalLoader from "@/utils/useGlobalLoader";
+import useGlobalErrorDialog from "@/utils/useGlobalErrorDialog";
+
+let { setGlobalLoader } = useGlobalLoader();
+let { setGlobalErrorDialog } = useGlobalErrorDialog();
 
 // state id
 const route = useRoute();
@@ -33,6 +47,34 @@ const changeState = (key: string) => {
   stateId.value = key;
 };
 
+// violent crimes
+let violentCrimeData: Ref<ViolentCrimeData["data"]> = ref([]);
+let violentCrimeYear = ref("");
+
+const getViolentCrimeData = () => {
+  setGlobalLoader(true);
+  DataServices.getViolentCrime("latest")
+    .then((response: ViolentCrimeResponse) => {
+      setGlobalLoader(false);
+      violentCrimeData.value = response.data.data;
+    })
+    .catch((error) => {
+      setGlobalLoader(false);
+      setGlobalErrorDialog(error);
+    });
+};
+
+getViolentCrimeData();
+
+const stateViolentCrimeData = computed(() => {
+  let stateData = violentCrimeData.value.filter((state) => {
+    return state["ID State"] === stateId.value;
+  });
+  // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+  violentCrimeYear.value = stateData[0]?.Year || "";
+  return Math.floor(stateData[0]?.["Violent Crime"]) || 0;
+});
+
 // on mounted
 onMounted(() => {
   getStateId();
@@ -52,8 +94,20 @@ onMounted(() => {
     <div class="card card2">
       <MapUSA :isClickable="false" :state="stateAbbre" />
     </div>
-    <div class="card card3">Violent Crimes per 100,000 People</div>
-    <div class="card card4">Homicides per 100,000 People</div>
+    <div class="card card3">
+      <CountingAnimation
+        :endValue="stateViolentCrimeData"
+        :text="`Crimes per 100,000 People (${violentCrimeYear})`"
+        :state="stateAbbre"
+      />
+    </div>
+    <div class="card card4">
+      <CountingAnimation
+        :endValue="468"
+        :text="'Homicides per 100,000 People'"
+        :state="stateAbbre"
+      />
+    </div>
     <div class="card card5">
       <div class="inside-card">
         <PluralBarChart :state="stateId" />
