@@ -75,6 +75,34 @@ const stateViolentCrimeData = computed(() => {
   return Math.floor(stateData[0]?.["Violent Crime"]) || 0;
 });
 
+// homicides
+let homicidesData: Ref<HomicidesData["data"]> = ref([]);
+let homicidesYear = ref("");
+
+const getHomicidesData = () => {
+  setGlobalLoader(true);
+  DataServices.getHomicides("latest")
+    .then((response: HomicidesResponse) => {
+      setGlobalLoader(false);
+      homicidesData.value = response.data.data;
+    })
+    .catch((error) => {
+      setGlobalLoader(false);
+      setGlobalErrorDialog(error);
+    });
+};
+
+getHomicidesData();
+
+const stateHomicidesData = computed(() => {
+  let stateData = homicidesData.value.filter((state) => {
+    return state["ID State"] === stateId.value;
+  });
+  // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+  homicidesYear.value = stateData[0]?.Year || "";
+  return Math.floor(stateData[0]?.Homicides) || 0;
+});
+
 // on mounted
 onMounted(() => {
   getStateId();
@@ -103,8 +131,8 @@ onMounted(() => {
     </div>
     <div class="card card4">
       <CountingAnimation
-        :endValue="468"
-        :text="'Homicides per 100,000 People'"
+        :endValue="stateHomicidesData"
+        :text="`Homicides per 100,000 People (${homicidesYear})`"
         :state="stateAbbre"
       />
     </div>
