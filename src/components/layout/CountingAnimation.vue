@@ -23,15 +23,15 @@ const displayedNumber = computed(() => {
 
 const setCounterInterval = () => {
   counter = setInterval(() => {
-    currentNumber.value++;
-    if (currentNumber.value === props.endValue) {
+    if (currentNumber.value === props.endValue || props.endValue < 0) {
       clearInterval(counter);
     }
+    currentNumber.value++;
   }, duration);
 };
 
 watch(
-  () => props.state,
+  () => props.endValue,
   () => {
     currentNumber.value = 0;
     clearInterval(counter);

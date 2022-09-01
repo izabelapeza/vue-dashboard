@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // imports
-import { onMounted, ref, computed, watch } from "vue";
+import { onMounted, ref, computed } from "vue";
 import type { Ref } from "vue";
 import StateSelector from "@/components/layout/StatesSelector.vue";
 import { useRoute } from "vue-router";
