@@ -7,6 +7,8 @@ import DataServices from "@/services/dataService";
 import {
   ExcessiveDrinkingResponse,
   ExcessiveDrinkingData,
+  AlcoholDrivingDeathsResponse,
+  AlcoholDrivingDeathsData,
 } from "@/types/ResponseData";
 import useGlobalLoader from "@/utils/useGlobalLoader";
 import useGlobalErrorDialog from "@/utils/useGlobalErrorDialog";
@@ -64,14 +66,53 @@ const stateExcessiveDrinkingData = computed(() => {
   return data;
 });
 
+// alcohol impaired driving deaths
+let alcoholDrivingDeathsData: Ref<AlcoholDrivingDeathsData["data"]> = ref([]);
+
+const getAlcoholDrivingDeaths = () => {
+  setGlobalLoader(true);
+  DataServices.getAlcoholDrivingDeaths()
+    .then((response: AlcoholDrivingDeathsResponse) => {
+      setGlobalLoader(false);
+      alcoholDrivingDeathsData.value = response.data.data;
+    })
+    .catch((error) => {
+      setGlobalLoader(false);
+      setGlobalErrorDialog(error);
+    });
+};
+
+getAlcoholDrivingDeaths();
+
+const stateAlcoholDrivingDeaths = computed(() => {
+  let data: number[] = [];
+  let stateData = alcoholDrivingDeathsData.value.filter((state) => {
+    return state["ID State"] === props.state;
+  });
+  yearsLabels.forEach((year) => {
+    data.push(
+      stateData.find((state) => {
+        return state.Year === year;
+      })?.["Alcohol-Impaired Driving Deaths"] || 0
+    );
+  });
+  return data;
+});
+
 // chart config
 const pluralBarChartConfig = computed(() => {
   return pluralBarChart(yearsLabels, [
     {
       label: "Excessive Drinking",
       data: stateExcessiveDrinkingData.value,
-      borderColor: "#d83e96",
-      backgroundColor: "#d83e96CC",
+      borderColor: "#f26b38",
+      backgroundColor: "#f26b38CC",
+    },
+    {
+      label: "Alcohol Impaired Driving Deaths",
+      data: stateAlcoholDrivingDeaths.value,
+      borderColor: "#8122a7",
+      backgroundColor: "#8122a7CC",
     },
   ]);
 });

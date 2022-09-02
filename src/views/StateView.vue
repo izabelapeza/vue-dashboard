@@ -176,7 +176,7 @@ onMounted(() => {
   }
 
   grid-template-columns: calc(100vw - 7.5rem);
-  grid-template-rows: 47vw 30vw repeat(2, 32vh) 47vw;
+  grid-template-rows: 47vw 30vw repeat(2, 28vh) 47vw;
 
   gap: 1rem;
 }

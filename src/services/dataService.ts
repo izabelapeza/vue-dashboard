@@ -25,6 +25,11 @@ class DataService {
   getExcessiveDrinking(): Promise<any> {
     return http.get("?drilldowns=State&measures=Excessive%20Drinking");
   }
+  getAlcoholDrivingDeaths(): Promise<any> {
+    return http.get(
+      "?drilldowns=State&measures=Alcohol-Impaired%20Driving%20Deaths"
+    );
+  }
   getViolentCrime(year = ""): Promise<any> {
     return http.get(`?drilldowns=State&measure=Violent%20Crime&year=${year}`);
   }

@@ -182,6 +182,27 @@ export interface ExcessiveDrinkingResponse {
   request: string;
 }
 
+// alcohol impaired driving deaths
+export interface AlcoholDrivingDeathsData {
+  data: {
+    "Alcohol-Impaired Driving Deaths": number;
+    "ID State": string;
+    "ID Year": number;
+    "Slug Nation": string;
+    Year: string;
+  }[];
+  source: Source[];
+}
+
+export interface AlcoholDrivingDeathsResponse {
+  data: AlcoholDrivingDeathsData;
+  status: number;
+  statusText: string;
+  headers: Headers;
+  config: Config;
+  request: string;
+}
+
 // violent crime
 export interface ViolentCrimeData {
   data: {
