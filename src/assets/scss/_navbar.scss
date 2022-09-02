@@ -112,3 +112,43 @@
     filter: brightness(2);
   }
 }
+
+// logo
+.logo {
+  background-color: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  width: 16rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+
+  &__title {
+    width: 0;
+    overflow: hidden;
+    transition: var(--transition-fast);
+    color: var(--text-primary);
+    white-space: nowrap;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+  }
+
+  &__icon {
+    color: var(--text-primary);
+    min-width: 1.5rem;
+    margin: 0 1rem;
+    transition: var(--transition-fast);
+  }
+}
+
+.navbar:hover .logo {
+  &__title {
+    width: 10.5rem;
+    padding-left: 1.2rem;
+  }
+  &__icon {
+    transform: rotate(-180deg);
+    margin: 0;
+  }
+}

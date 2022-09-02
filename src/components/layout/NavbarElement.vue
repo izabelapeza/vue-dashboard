@@ -26,6 +26,10 @@ const changeTheme = (isDarkMode: boolean) => {
 <template>
   <nav class="navbar">
     <div class="navbar__items">
+      <div class="logo">
+        <div class="logo__title">USA Health</div>
+        <mdicon class="logo__icon" name="chevronDoubleRight" size="46" />
+      </div>
       <router-link to="/" class="navbar__item">
         <mdicon name="mapSearch" size="46" class="navbar__icon top-icon" />
         <span class="text">US Map</span>
