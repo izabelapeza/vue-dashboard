@@ -29,6 +29,8 @@ export const pluralBarChart = (
     data: number[];
     borderColor: string;
     backgroundColor: string;
+    type?: string;
+    order?: number;
   }[]
 ) => {
   return {

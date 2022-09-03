@@ -12,7 +12,7 @@ import {
   DrugOverdoseResponse,
   OpioidOverdoseResponse,
 } from "@/types/ResponseData";
-import { barChart } from "@/utils/chartConfigs";
+import { barChart, pluralBarChart } from "@/utils/chartConfigs";
 import { stateID, isState } from "@/utils/statesID";
 import useGlobalLoader from "@/utils/useGlobalLoader";
 import useGlobalErrorDialog from "@/utils/useGlobalErrorDialog";
@@ -183,6 +183,30 @@ const getOpioidOverdose = () => {
 
 getOpioidOverdose();
 
+// temp
+const temp = computed(() => {
+  return pluralBarChart(
+    ["2011", "2012", "2013", "2014", "2015"],
+    [
+      {
+        label: "temp1",
+        data: [10, 30, 20, 15, 17],
+        borderColor: "#e2bf11",
+        backgroundColor: "#e2bf11CC",
+        order: 1,
+      },
+      {
+        label: "temp2",
+        data: [12, 17, 22, 9, 15],
+        borderColor: "#d83e96",
+        backgroundColor: "#d83e96CC",
+        type: "line",
+        order: 0,
+      },
+    ]
+  );
+});
+
 // add tooltip to map (with mouseover state)
 const mouseoverState: Ref<string | null> = ref(null);
 
@@ -240,7 +264,7 @@ onMounted(() => {
         :duration="100"
       />
     </div>
-    <div class="card card4"></div>
+    <div class="card card4"><BaseChart :config="temp" :id="'temp'" /></div>
     <div class="card card5">
       <div class="map-chart">
         <BaseChart :config="adultObesityConfig" :id="'obesity'" />
@@ -266,7 +290,7 @@ onMounted(() => {
 
   @media only screen and (min-width: 1120px) {
     grid-template-columns: 20vw 20vw 20vw auto;
-    grid-template-rows: repeat(6, 15vh);
+    grid-template-rows: repeat(6, 14.5vh);
 
     grid-template-areas:
       "card1 card1 card2 card5"
@@ -301,18 +325,20 @@ onMounted(() => {
     .map-chart {
       width: 27vw;
     }
+    .card1 {
+      height: 47vh;
+    }
   }
 
   gap: 1rem;
-
-  .card1 {
-    height: 48.5vh;
-  }
 
   .map-chart {
     width: 90%;
     padding: 1rem 0;
   }
+
+  grid-template-columns: calc(100vw - 7.5rem);
+  grid-template-rows: 47vw repeat(2 8rem) repeat(4, 28vh);
 }
 
 .map-hover {
@@ -331,6 +357,12 @@ onMounted(() => {
   position: relative;
   height: 240px;
   width: 240px;
+  padding: 1rem;
+}
+
+.card2,
+.card3,
+.card4 {
   padding: 1rem;
 }
 </style>
