@@ -12,10 +12,11 @@ import {
   DrugOverdoseResponse,
   OpioidOverdoseResponse,
 } from "@/types/ResponseData";
-import { barChart, doughnutChart } from "@/utils/chartConfigs";
+import { barChart } from "@/utils/chartConfigs";
 import { stateID, isState } from "@/utils/statesID";
 import useGlobalLoader from "@/utils/useGlobalLoader";
 import useGlobalErrorDialog from "@/utils/useGlobalErrorDialog";
+import CountingAnimation from "@/components/layout/CountingAnimation.vue";
 
 let { setGlobalLoader } = useGlobalLoader();
 let { setGlobalErrorDialog } = useGlobalErrorDialog();
@@ -135,24 +136,19 @@ const adultSmokingConfig = computed(() => {
 });
 
 // drug overdose reath rate
-let drugOverdoseLabels: Ref<string[]> = ref([]);
-let drugOverdoseData: Ref<number[]> = ref([]);
-let drugOverdoseLatestYear: Ref<number> = ref(0);
+let drugOverdoseLabel: Ref<string> = ref("");
+let drugOverdoseData: Ref<number> = ref(0);
 
 const getDrugOverdose = () => {
   setGlobalLoader(true);
   DataServices.getDrugOverdose()
     .then((response: DrugOverdoseResponse) => {
-      drugOverdoseLatestYear.value = response.data.data[0]["ID Year"];
-      drugOverdoseLabels.value = [
-        `Drug Overdose Death Rate (${drugOverdoseLatestYear.value})`,
-        "Other",
-      ];
-      let adultNumber =
+      drugOverdoseLabel.value = `Drug Overdose Death Rate (${response.data.data[0]["ID Year"]})`;
+      drugOverdoseData.value = Math.floor(
         response.data.data[0][
           "Drug Overdose Death Rate Per 100,000 Age-Adjusted"
-        ];
-      drugOverdoseData.value = [adultNumber, 100 - adultNumber];
+        ]
+      );
       setGlobalLoader(false);
     })
     .catch((error) => {
@@ -163,34 +159,20 @@ const getDrugOverdose = () => {
 
 getDrugOverdose();
 
-const drugOverdoseConfig = computed(() => {
-  return doughnutChart(
-    drugOverdoseLabels.value,
-    "",
-    ["#8122a7", "#c7c7c777"],
-    drugOverdoseData.value
-  );
-});
-
 // opioid overdose reath rate
-let opioidOverdoseLabels: Ref<string[]> = ref([]);
-let opioidOverdoseData: Ref<number[]> = ref([]);
-let opioidOverdoseLatestYear: Ref<number> = ref(0);
+let opioidOverdoseLabel: Ref<string> = ref("");
+let opioidOverdoseData: Ref<number> = ref(0);
 
 const getOpioidOverdose = () => {
   setGlobalLoader(true);
   DataServices.getOpioidOverdose()
     .then((response: OpioidOverdoseResponse) => {
-      opioidOverdoseLatestYear.value = response.data.data[0]["ID Year"];
-      opioidOverdoseLabels.value = [
-        `Opioid Overdose Death Rate (${opioidOverdoseLatestYear.value})`,
-        "Other",
-      ];
-      let adultNumber =
+      opioidOverdoseLabel.value = `Opioid Overdose Death Rate (${response.data.data[0]["ID Year"]})`;
+      opioidOverdoseData.value = Math.floor(
         response.data.data[0][
           "Opioid Overdose Death Rate Per 100,000 Age-Adjusted"
-        ];
-      opioidOverdoseData.value = [adultNumber, 100 - adultNumber];
+        ]
+      );
       setGlobalLoader(false);
     })
     .catch((error) => {
@@ -200,15 +182,6 @@ const getOpioidOverdose = () => {
 };
 
 getOpioidOverdose();
-
-const opioidOverdoseConfig = computed(() => {
-  return doughnutChart(
-    opioidOverdoseLabels.value,
-    "",
-    ["#e2bf11", "#c7c7c777"],
-    opioidOverdoseData.value
-  );
-});
 
 // add tooltip to map (with mouseover state)
 const mouseoverState: Ref<string | null> = ref(null);
@@ -248,26 +221,37 @@ onMounted(() => {
       </div>
     </div>
     <div class="card card2">
-      <div class="doughnut-contener">
-        <BaseChart :config="drugOverdoseConfig" :id="'drug-overdose'" />
-      </div>
+      <CountingAnimation
+        :endValue="opioidOverdoseData"
+        :text="opioidOverdoseLabel"
+        :flexDirection="'column'"
+        :color="'#f26b38'"
+        :withPercentage="true"
+        :duration="100"
+      />
     </div>
     <div class="card card3">
-      <div class="doughnut-contener">
-        <BaseChart :config="opioidOverdoseConfig" :id="'opioid-overdose'" />
-      </div>
+      <CountingAnimation
+        :endValue="drugOverdoseData"
+        :text="drugOverdoseLabel"
+        :flexDirection="'column'"
+        :color="'#8122a7'"
+        :withPercentage="true"
+        :duration="100"
+      />
     </div>
-    <div class="card card4">
+    <div class="card card4"></div>
+    <div class="card card5">
       <div class="map-chart">
         <BaseChart :config="adultObesityConfig" :id="'obesity'" />
       </div>
     </div>
-    <div class="card card5">
+    <div class="card card6">
       <div class="map-chart">
         <BaseChart :config="diabetesConfig" :id="'diabetes'" />
       </div>
     </div>
-    <div class="card card6">
+    <div class="card card7">
       <div class="map-chart">
         <BaseChart :config="adultSmokingConfig" :id="'smoking'" />
       </div>
@@ -281,13 +265,16 @@ onMounted(() => {
   display: grid;
 
   @media only screen and (min-width: 1120px) {
-    grid-template-columns: 30vw 30vw auto;
-    grid-template-rows: repeat(3, 30vh);
+    grid-template-columns: 20vw 20vw 20vw auto;
+    grid-template-rows: repeat(6, 15vh);
 
     grid-template-areas:
-      "card1 card1 card4"
-      "card1 card1 card5"
-      "card2 card3 card6";
+      "card1 card1 card2 card5"
+      "card1 card1 card2 card5"
+      "card1 card1 card2 card6"
+      "card3 card4 card4 card6"
+      "card3 card4 card4 card7"
+      "card3 card4 card4 card7";
 
     & .card1 {
       grid-area: card1;
@@ -308,6 +295,9 @@ onMounted(() => {
     & .card6 {
       grid-area: card6;
     }
+    & .card7 {
+      grid-area: card7;
+    }
     .map-chart {
       width: 27vw;
     }
@@ -316,7 +306,7 @@ onMounted(() => {
   gap: 1rem;
 
   .card1 {
-    height: 62vh;
+    height: 48.5vh;
   }
 
   .map-chart {

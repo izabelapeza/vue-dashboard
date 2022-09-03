@@ -126,14 +126,16 @@ onMounted(() => {
       <CountingAnimation
         :endValue="stateViolentCrimeData"
         :text="`Crimes per 100,000 People (${violentCrimeYear})`"
-        :state="stateAbbre"
+        :withPlus="true"
+        :duration="10"
       />
     </div>
     <div class="card card4">
       <CountingAnimation
         :endValue="stateHomicidesData"
         :text="`Homicides per 100,000 People (${homicidesYear})`"
-        :state="stateAbbre"
+        :withPlus="true"
+        :duration="250"
       />
     </div>
     <div class="card card5">

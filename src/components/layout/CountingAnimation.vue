@@ -6,18 +6,25 @@ import { onMounted, ref, defineProps, watch } from "vue";
 const props = defineProps<{
   endValue: number;
   text: string;
-  state: string;
+  duration: number;
+  flexDirection?: string;
+  withPlus?: boolean;
+  withPercentage?: boolean;
+  color?: string;
 }>();
 
 let currentNumber = ref(0);
-let interval = 5000;
-let duration = Math.floor(interval / props.endValue);
-
 let counter: number;
 
 const displayedNumber = computed(() => {
-  if (currentNumber.value < 10) return "00" + currentNumber.value;
-  if (currentNumber.value < 100) return "0" + currentNumber.value;
+  if (currentNumber.value < 10)
+    return (
+      "0".repeat(props.endValue.toString().length - 1) + currentNumber.value
+    );
+  if (currentNumber.value < 100)
+    return (
+      "0".repeat(props.endValue.toString().length - 2) + currentNumber.value
+    );
   return currentNumber.value;
 });
 
@@ -27,14 +34,14 @@ const setCounterInterval = () => {
       clearInterval(counter);
     }
     currentNumber.value++;
-  }, duration);
+  }, props.duration);
 };
 
 watch(
   () => props.endValue,
   () => {
-    currentNumber.value = 0;
     clearInterval(counter);
+    currentNumber.value = 0;
     setCounterInterval();
   }
 );
@@ -46,9 +53,15 @@ onMounted(() => {
 
 <template>
   <div class="counting-animation">
-    <div>
+    <div
+      :class="flexDirection === 'column' ? 'counting-animation__vertical' : ''"
+      :style="color ? `color: ${color}` : ''"
+    >
       <mdicon class="counter-icon" name="information" size="55" />
-      <p class="counter">{{ displayedNumber }}+</p>
+      <p class="counter">
+        {{ displayedNumber }}<template v-if="withPlus">+</template
+        ><template v-if="withPercentage">%</template>
+      </p>
     </div>
     <p class="desc">{{ text }}</p>
   </div>
@@ -80,11 +93,27 @@ onMounted(() => {
 
   & .counter-icon {
     transform: translateY(0.1rem);
+    opacity: 0.6;
   }
 
   & .desc {
     font-weight: lighter;
     text-align: center;
+  }
+
+  &__vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 0 !important;
+    max-height: 10rem !important;
+
+    & .counter {
+      font-size: 6rem;
+    }
+
+    & .counter-icon {
+      transform: translateY(0.5rem);
+    }
   }
 }
 </style>
