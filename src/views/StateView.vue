@@ -127,7 +127,7 @@ onMounted(() => {
         :endValue="stateViolentCrimeData"
         :text="`Crimes per 100,000 People (${violentCrimeYear})`"
         :withPlus="true"
-        :duration="10"
+        :duration="7"
       />
     </div>
     <div class="card card4">

@@ -14,6 +14,7 @@ import {
 } from "@/types/ResponseData";
 import useGlobalLoader from "@/utils/useGlobalLoader";
 import useGlobalErrorDialog from "@/utils/useGlobalErrorDialog";
+import getYearsLabel from "@/utils/getYearsLabel";
 
 let { setGlobalLoader } = useGlobalLoader();
 let { setGlobalErrorDialog } = useGlobalErrorDialog();
@@ -24,16 +25,7 @@ const props = defineProps<{
 }>();
 
 // years
-const yearsLabels = [
-  "2014",
-  "2015",
-  "2016",
-  "2017",
-  "2018",
-  "2019",
-  "2020",
-  "2021",
-];
+const yearsLabels = getYearsLabel(2014, 2021);
 
 // adult obesity
 let adultObesityData: Ref<ObesityData["data"]> = ref([]);

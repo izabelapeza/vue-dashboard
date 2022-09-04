@@ -12,14 +12,14 @@ class DataService {
   getAdultSmokingData(year = ""): Promise<any> {
     return http.get(`?drilldowns=State&measure=Adult Smoking&year=${year}`);
   }
-  getDrugOverdose(): Promise<any> {
+  getDrugOverdose(year = ""): Promise<any> {
     return http.get(
-      "?drilldowns=Nation&measures=Drug%20Overdose%20Death%20Rate%20Per%20100,000%20Age-Adjusted&year=latest"
+      `?drilldowns=Nation&measures=Drug%20Overdose%20Death%20Rate%20Per%20100,000%20Age-Adjusted&year=${year}`
     );
   }
-  getOpioidOverdose(): Promise<any> {
+  getOpioidOverdose(year = ""): Promise<any> {
     return http.get(
-      "?drilldowns=Nation&measures=Opioid%20Overdose%20Death%20Rate%20Per%20100,000%20Age-Adjusted&year=latest"
+      `?drilldowns=Nation&measures=Opioid%20Overdose%20Death%20Rate%20Per%20100,000%20Age-Adjusted&year=${year}`
     );
   }
   getExcessiveDrinking(): Promise<any> {

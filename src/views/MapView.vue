@@ -12,11 +12,12 @@ import {
   DrugOverdoseResponse,
   OpioidOverdoseResponse,
 } from "@/types/ResponseData";
-import { barChart, pluralBarChart } from "@/utils/chartConfigs";
+import { barChart } from "@/utils/chartConfigs";
 import { stateID, isState } from "@/utils/statesID";
 import useGlobalLoader from "@/utils/useGlobalLoader";
 import useGlobalErrorDialog from "@/utils/useGlobalErrorDialog";
 import CountingAnimation from "@/components/layout/CountingAnimation.vue";
+import BarLineChart from "../components/charts/BarLineChart.vue";
 
 let { setGlobalLoader } = useGlobalLoader();
 let { setGlobalErrorDialog } = useGlobalErrorDialog();
@@ -135,13 +136,13 @@ const adultSmokingConfig = computed(() => {
   );
 });
 
-// drug overdose reath rate
+// drug overdose death rate
 let drugOverdoseLabel: Ref<string> = ref("");
 let drugOverdoseData: Ref<number> = ref(0);
 
 const getDrugOverdose = () => {
   setGlobalLoader(true);
-  DataServices.getDrugOverdose()
+  DataServices.getDrugOverdose("latest")
     .then((response: DrugOverdoseResponse) => {
       drugOverdoseLabel.value = `Drug Overdose Death Rate (${response.data.data[0]["ID Year"]})`;
       drugOverdoseData.value = Math.floor(
@@ -159,13 +160,13 @@ const getDrugOverdose = () => {
 
 getDrugOverdose();
 
-// opioid overdose reath rate
+// opioid overdose death rate
 let opioidOverdoseLabel: Ref<string> = ref("");
 let opioidOverdoseData: Ref<number> = ref(0);
 
 const getOpioidOverdose = () => {
   setGlobalLoader(true);
-  DataServices.getOpioidOverdose()
+  DataServices.getOpioidOverdose("latest")
     .then((response: OpioidOverdoseResponse) => {
       opioidOverdoseLabel.value = `Opioid Overdose Death Rate (${response.data.data[0]["ID Year"]})`;
       opioidOverdoseData.value = Math.floor(
@@ -182,30 +183,6 @@ const getOpioidOverdose = () => {
 };
 
 getOpioidOverdose();
-
-// temp
-const temp = computed(() => {
-  return pluralBarChart(
-    ["2011", "2012", "2013", "2014", "2015"],
-    [
-      {
-        label: "temp1",
-        data: [10, 30, 20, 15, 17],
-        borderColor: "#e2bf11",
-        backgroundColor: "#e2bf11CC",
-        order: 1,
-      },
-      {
-        label: "temp2",
-        data: [12, 17, 22, 9, 15],
-        borderColor: "#d83e96",
-        backgroundColor: "#d83e96CC",
-        type: "line",
-        order: 0,
-      },
-    ]
-  );
-});
 
 // add tooltip to map (with mouseover state)
 const mouseoverState: Ref<string | null> = ref(null);
@@ -264,7 +241,7 @@ onMounted(() => {
         :duration="100"
       />
     </div>
-    <div class="card card4"><BaseChart :config="temp" :id="'temp'" /></div>
+    <div class="card card4"><BarLineChart /></div>
     <div class="card card5">
       <div class="map-chart">
         <BaseChart :config="adultObesityConfig" :id="'obesity'" />

@@ -117,8 +117,8 @@ export interface AdultSmokingResponse {
   request: string;
 }
 
-// drug overdose reath rate
-interface DrugOverdoseData {
+// drug overdose death rate
+export interface DrugOverdoseData {
   data: {
     "Drug Overdose Death Rate Per 100,000 Age-Adjusted": number;
     "ID Nation": string;
@@ -139,8 +139,8 @@ export interface DrugOverdoseResponse {
   request: string;
 }
 
-// opioid overdose reath rate
-interface OpioidOverdoseData {
+// opioid overdose death rate
+export interface OpioidOverdoseData {
   data: {
     "Opioid Overdose Death Rate Per 100,000 Age-Adjusted": number;
     "ID Nation": string;
