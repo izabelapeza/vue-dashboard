@@ -55,11 +55,19 @@ const addClickableState = () => {
   });
 };
 
+const removeClickableState = () => {
+  let allLand = document.querySelectorAll(".land");
+  allLand.forEach((landElement) => {
+    landElement.classList.remove("clickable-state");
+  });
+};
+
 // on mounted
 onMounted(() => {
+  removePointedState();
   if (props.isClickable) {
     addClickableState();
-  }
+  } else removeClickableState();
   if (props.state) {
     pointState();
   }
