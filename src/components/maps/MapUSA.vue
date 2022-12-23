@@ -37,6 +37,7 @@ watch(
 
 // click temp
 const pushToState = (event: any) => {
+  console.log(event.target.id);
   let stateID = event.path[0].id.split("-")[1];
   router.push({ path: `/state/${stateID}` });
 };

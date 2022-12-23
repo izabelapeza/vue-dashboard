@@ -10,12 +10,7 @@ import {
   OpioidOverdoseResponse,
   OpioidOverdoseData,
 } from "@/types/ResponseData";
-import useGlobalLoader from "@/utils/useGlobalLoader";
-import useGlobalErrorDialog from "@/utils/useGlobalErrorDialog";
 import getYearsLabel from "@/utils/getYearsLabel";
-
-let { setGlobalLoader } = useGlobalLoader();
-let { setGlobalErrorDialog } = useGlobalErrorDialog();
 
 // years
 const yearsLabels = getYearsLabel(1999, 2016);
@@ -24,16 +19,9 @@ const yearsLabels = getYearsLabel(1999, 2016);
 let drugOverdoseData: Ref<DrugOverdoseData["data"]> = ref([]);
 
 const getDrugOverdose = () => {
-  setGlobalLoader(true);
-  DataServices.getDrugOverdose()
-    .then((response: DrugOverdoseResponse) => {
-      setGlobalLoader(false);
-      drugOverdoseData.value = response.data.data;
-    })
-    .catch((error) => {
-      setGlobalLoader(false);
-      setGlobalErrorDialog(error);
-    });
+  DataServices.getDrugOverdose().then((response: DrugOverdoseResponse) => {
+    drugOverdoseData.value = response.data.data;
+  });
 };
 
 getDrugOverdose();
@@ -54,16 +42,9 @@ const nationDrugOverdoseData = computed(() => {
 let opioidOverdoseData: Ref<OpioidOverdoseData["data"]> = ref([]);
 
 const getOpioidOverdose = () => {
-  setGlobalLoader(true);
-  DataServices.getOpioidOverdose()
-    .then((response: OpioidOverdoseResponse) => {
-      setGlobalLoader(false);
-      opioidOverdoseData.value = response.data.data;
-    })
-    .catch((error) => {
-      setGlobalLoader(false);
-      setGlobalErrorDialog(error);
-    });
+  DataServices.getOpioidOverdose().then((response: OpioidOverdoseResponse) => {
+    opioidOverdoseData.value = response.data.data;
+  });
 };
 
 getOpioidOverdose();

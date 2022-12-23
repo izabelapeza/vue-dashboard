@@ -14,13 +14,8 @@ import {
 } from "@/types/ResponseData";
 import { barChart } from "@/utils/chartConfigs";
 import { stateID, isState } from "@/utils/statesID";
-import useGlobalLoader from "@/utils/useGlobalLoader";
-import useGlobalErrorDialog from "@/utils/useGlobalErrorDialog";
 import CountingAnimation from "@/components/layout/CountingAnimation.vue";
 import BarLineChart from "../components/charts/BarLineChart.vue";
-
-let { setGlobalLoader } = useGlobalLoader();
-let { setGlobalErrorDialog } = useGlobalErrorDialog();
 
 // adult obesity
 let adultObesityLabels: Ref<string[]> = ref([]);
@@ -28,9 +23,8 @@ let adultObesityData: Ref<number[]> = ref([]);
 let adultObesityLatestYear: Ref<number> = ref(0);
 
 const getAdultObesityData = () => {
-  setGlobalLoader(true);
-  DataServices.getAdultObesityData("latest")
-    .then((response: AdultObesityResponse) => {
+  DataServices.getAdultObesityData("latest").then(
+    (response: AdultObesityResponse) => {
       adultObesityLatestYear.value = response.data.data[0]["ID Year"];
       let sortedData = response.data.data.sort((a, b) => {
         return b["Adult Obesity"] - a["Adult Obesity"];
@@ -41,12 +35,8 @@ const getAdultObesityData = () => {
       adultObesityData.value = sortedData.map((state) => {
         return state["Adult Obesity"];
       });
-      setGlobalLoader(false);
-    })
-    .catch((error) => {
-      setGlobalLoader(false);
-      setGlobalErrorDialog(error);
-    });
+    }
+  );
 };
 
 getAdultObesityData();
@@ -66,25 +56,18 @@ let diabetesData: Ref<number[]> = ref([]);
 let diabetesLatestYear: Ref<number> = ref(0);
 
 const getDiabetesData = () => {
-  setGlobalLoader(true);
-  DataServices.getDiabetesData("latest")
-    .then((response: DiabetesResponse) => {
-      diabetesLatestYear.value = response.data.data[0]["ID Year"];
-      let sortedData = response.data.data.sort((a, b) => {
-        return b["Diabetes Prevalence"] - a["Diabetes Prevalence"];
-      });
-      diabetesLabels.value = sortedData.map((state) => {
-        return state.State;
-      });
-      diabetesData.value = sortedData.map((state) => {
-        return state["Diabetes Prevalence"];
-      });
-      setGlobalLoader(false);
-    })
-    .catch((error) => {
-      setGlobalLoader(false);
-      setGlobalErrorDialog(error);
+  DataServices.getDiabetesData("latest").then((response: DiabetesResponse) => {
+    diabetesLatestYear.value = response.data.data[0]["ID Year"];
+    let sortedData = response.data.data.sort((a, b) => {
+      return b["Diabetes Prevalence"] - a["Diabetes Prevalence"];
     });
+    diabetesLabels.value = sortedData.map((state) => {
+      return state.State;
+    });
+    diabetesData.value = sortedData.map((state) => {
+      return state["Diabetes Prevalence"];
+    });
+  });
 };
 
 getDiabetesData();
@@ -104,9 +87,8 @@ let adultSmokingData: Ref<number[]> = ref([]);
 let adultSmokingLatestYear: Ref<number> = ref(0);
 
 const getAdultSmokingData = () => {
-  setGlobalLoader(true);
-  DataServices.getAdultSmokingData("latest")
-    .then((response: AdultSmokingResponse) => {
+  DataServices.getAdultSmokingData("latest").then(
+    (response: AdultSmokingResponse) => {
       adultSmokingLatestYear.value = response.data.data[0]["ID Year"];
       let sortedData = response.data.data.sort((a, b) => {
         return b["Adult Smoking"] - a["Adult Smoking"];
@@ -117,12 +99,8 @@ const getAdultSmokingData = () => {
       adultSmokingData.value = sortedData.map((state) => {
         return state["Adult Smoking"];
       });
-      setGlobalLoader(false);
-    })
-    .catch((error) => {
-      setGlobalLoader(false);
-      setGlobalErrorDialog(error);
-    });
+    }
+  );
 };
 
 getAdultSmokingData();
@@ -141,21 +119,16 @@ let drugOverdoseLabel: Ref<string> = ref("");
 let drugOverdoseData: Ref<number> = ref(0);
 
 const getDrugOverdose = () => {
-  setGlobalLoader(true);
-  DataServices.getDrugOverdose("latest")
-    .then((response: DrugOverdoseResponse) => {
+  DataServices.getDrugOverdose("latest").then(
+    (response: DrugOverdoseResponse) => {
       drugOverdoseLabel.value = `Drug Overdose Death Rate (${response.data.data[0]["ID Year"]})`;
       drugOverdoseData.value = Math.floor(
         response.data.data[0][
           "Drug Overdose Death Rate Per 100,000 Age-Adjusted"
         ]
       );
-      setGlobalLoader(false);
-    })
-    .catch((error) => {
-      setGlobalLoader(false);
-      setGlobalErrorDialog(error);
-    });
+    }
+  );
 };
 
 getDrugOverdose();
@@ -165,21 +138,16 @@ let opioidOverdoseLabel: Ref<string> = ref("");
 let opioidOverdoseData: Ref<number> = ref(0);
 
 const getOpioidOverdose = () => {
-  setGlobalLoader(true);
-  DataServices.getOpioidOverdose("latest")
-    .then((response: OpioidOverdoseResponse) => {
+  DataServices.getOpioidOverdose("latest").then(
+    (response: OpioidOverdoseResponse) => {
       opioidOverdoseLabel.value = `Opioid Overdose Death Rate (${response.data.data[0]["ID Year"]})`;
       opioidOverdoseData.value = Math.floor(
         response.data.data[0][
           "Opioid Overdose Death Rate Per 100,000 Age-Adjusted"
         ]
       );
-      setGlobalLoader(false);
-    })
-    .catch((error) => {
-      setGlobalLoader(false);
-      setGlobalErrorDialog(error);
-    });
+    }
+  );
 };
 
 getOpioidOverdose();

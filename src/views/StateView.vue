@@ -16,11 +16,6 @@ import {
   HomicidesResponse,
   HomicidesData,
 } from "@/types/ResponseData";
-import useGlobalLoader from "@/utils/useGlobalLoader";
-import useGlobalErrorDialog from "@/utils/useGlobalErrorDialog";
-
-let { setGlobalLoader } = useGlobalLoader();
-let { setGlobalErrorDialog } = useGlobalErrorDialog();
 
 // state id
 const route = useRoute();
@@ -52,16 +47,11 @@ let violentCrimeData: Ref<ViolentCrimeData["data"]> = ref([]);
 let violentCrimeYear = ref("");
 
 const getViolentCrimeData = () => {
-  setGlobalLoader(true);
-  DataServices.getViolentCrime("latest")
-    .then((response: ViolentCrimeResponse) => {
-      setGlobalLoader(false);
+  DataServices.getViolentCrime("latest").then(
+    (response: ViolentCrimeResponse) => {
       violentCrimeData.value = response.data.data;
-    })
-    .catch((error) => {
-      setGlobalLoader(false);
-      setGlobalErrorDialog(error);
-    });
+    }
+  );
 };
 
 getViolentCrimeData();
@@ -80,16 +70,9 @@ let homicidesData: Ref<HomicidesData["data"]> = ref([]);
 let homicidesYear = ref("");
 
 const getHomicidesData = () => {
-  setGlobalLoader(true);
-  DataServices.getHomicides("latest")
-    .then((response: HomicidesResponse) => {
-      setGlobalLoader(false);
-      homicidesData.value = response.data.data;
-    })
-    .catch((error) => {
-      setGlobalLoader(false);
-      setGlobalErrorDialog(error);
-    });
+  DataServices.getHomicides("latest").then((response: HomicidesResponse) => {
+    homicidesData.value = response.data.data;
+  });
 };
 
 getHomicidesData();

@@ -10,12 +10,7 @@ import {
   AlcoholDrivingDeathsResponse,
   AlcoholDrivingDeathsData,
 } from "@/types/ResponseData";
-import useGlobalLoader from "@/utils/useGlobalLoader";
-import useGlobalErrorDialog from "@/utils/useGlobalErrorDialog";
 import getYearsLabel from "@/utils/getYearsLabel";
-
-let { setGlobalLoader } = useGlobalLoader();
-let { setGlobalErrorDialog } = useGlobalErrorDialog();
 
 // props
 const props = defineProps<{
@@ -29,16 +24,11 @@ const yearsLabels = getYearsLabel(2014, 2021);
 let excessiveDrinkingData: Ref<ExcessiveDrinkingData["data"]> = ref([]);
 
 const getExcessiveDrinking = () => {
-  setGlobalLoader(true);
-  DataServices.getExcessiveDrinking()
-    .then((response: ExcessiveDrinkingResponse) => {
-      setGlobalLoader(false);
+  DataServices.getExcessiveDrinking().then(
+    (response: ExcessiveDrinkingResponse) => {
       excessiveDrinkingData.value = response.data.data;
-    })
-    .catch((error) => {
-      setGlobalLoader(false);
-      setGlobalErrorDialog(error);
-    });
+    }
+  );
 };
 
 getExcessiveDrinking();
@@ -62,16 +52,11 @@ const stateExcessiveDrinkingData = computed(() => {
 let alcoholDrivingDeathsData: Ref<AlcoholDrivingDeathsData["data"]> = ref([]);
 
 const getAlcoholDrivingDeaths = () => {
-  setGlobalLoader(true);
-  DataServices.getAlcoholDrivingDeaths()
-    .then((response: AlcoholDrivingDeathsResponse) => {
-      setGlobalLoader(false);
+  DataServices.getAlcoholDrivingDeaths().then(
+    (response: AlcoholDrivingDeathsResponse) => {
       alcoholDrivingDeathsData.value = response.data.data;
-    })
-    .catch((error) => {
-      setGlobalLoader(false);
-      setGlobalErrorDialog(error);
-    });
+    }
+  );
 };
 
 getAlcoholDrivingDeaths();
