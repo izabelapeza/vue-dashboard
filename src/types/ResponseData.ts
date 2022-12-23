@@ -51,6 +51,15 @@ interface Config {
   url: string;
 }
 
+interface Response<T> {
+  data: T;
+  status: number;
+  statusText: string;
+  headers: Headers;
+  config: Config;
+  request: string;
+}
+
 // obesity
 export interface ObesityData {
   data: {
@@ -64,14 +73,7 @@ export interface ObesityData {
   source: Source[];
 }
 
-export interface AdultObesityResponse {
-  data: ObesityData;
-  status: number;
-  statusText: string;
-  headers: Headers;
-  config: Config;
-  request: string;
-}
+export type AdultObesityResponse = Response<ObesityData>;
 
 // diabetes
 export interface DiabetesData {
@@ -86,14 +88,7 @@ export interface DiabetesData {
   source: Source[];
 }
 
-export interface DiabetesResponse {
-  data: DiabetesData;
-  status: number;
-  statusText: string;
-  headers: Headers;
-  config: Config;
-  request: string;
-}
+export type DiabetesResponse = Response<DiabetesData>;
 
 // adult smoking
 export interface AdultSmokingData {
@@ -108,14 +103,7 @@ export interface AdultSmokingData {
   source: Source[];
 }
 
-export interface AdultSmokingResponse {
-  data: AdultSmokingData;
-  status: number;
-  statusText: string;
-  headers: Headers;
-  config: Config;
-  request: string;
-}
+export type AdultSmokingResponse = Response<AdultSmokingData>;
 
 // drug overdose death rate
 export interface DrugOverdoseData {
@@ -130,14 +118,7 @@ export interface DrugOverdoseData {
   source: Source[];
 }
 
-export interface DrugOverdoseResponse {
-  data: DrugOverdoseData;
-  status: number;
-  statusText: string;
-  headers: Headers;
-  config: Config;
-  request: string;
-}
+export type DrugOverdoseResponse = Response<DrugOverdoseData>;
 
 // opioid overdose death rate
 export interface OpioidOverdoseData {
@@ -152,14 +133,7 @@ export interface OpioidOverdoseData {
   source: Source[];
 }
 
-export interface OpioidOverdoseResponse {
-  data: OpioidOverdoseData;
-  status: number;
-  statusText: string;
-  headers: Headers;
-  config: Config;
-  request: string;
-}
+export type OpioidOverdoseResponse = Response<OpioidOverdoseData>;
 
 // excessive drinking
 export interface ExcessiveDrinkingData {
@@ -173,14 +147,7 @@ export interface ExcessiveDrinkingData {
   source: Source[];
 }
 
-export interface ExcessiveDrinkingResponse {
-  data: ExcessiveDrinkingData;
-  status: number;
-  statusText: string;
-  headers: Headers;
-  config: Config;
-  request: string;
-}
+export type ExcessiveDrinkingResponse = Response<ExcessiveDrinkingData>;
 
 // alcohol impaired driving deaths
 export interface AlcoholDrivingDeathsData {
@@ -194,14 +161,7 @@ export interface AlcoholDrivingDeathsData {
   source: Source[];
 }
 
-export interface AlcoholDrivingDeathsResponse {
-  data: AlcoholDrivingDeathsData;
-  status: number;
-  statusText: string;
-  headers: Headers;
-  config: Config;
-  request: string;
-}
+export type AlcoholDrivingDeathsResponse = Response<AlcoholDrivingDeathsData>;
 
 // violent crime
 export interface ViolentCrimeData {
@@ -216,14 +176,7 @@ export interface ViolentCrimeData {
   source: Source[];
 }
 
-export interface ViolentCrimeResponse {
-  data: ViolentCrimeData;
-  status: number;
-  statusText: string;
-  headers: Headers;
-  config: Config;
-  request: string;
-}
+export type ViolentCrimeResponse = Response<ViolentCrimeData>;
 
 // homicides
 export interface HomicidesData {
@@ -238,11 +191,4 @@ export interface HomicidesData {
   source: Source[];
 }
 
-export interface HomicidesResponse {
-  data: HomicidesData;
-  status: number;
-  statusText: string;
-  headers: Headers;
-  config: Config;
-  request: string;
-}
+export type HomicidesResponse = Response<HomicidesData>;
