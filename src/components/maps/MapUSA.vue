@@ -37,8 +37,7 @@ watch(
 
 // click temp
 const pushToState = (event: any) => {
-  console.log(event.target.id);
-  let stateID = event.path[0].id.split("-")[1];
+  let stateID = event.target.id.split("-")[1];
   router.push({ path: `/state/${stateID}` });
 };
 
@@ -50,7 +49,7 @@ const addClickableState = () => {
       emit("emitMouseoverState", null);
     });
     landElement.addEventListener("mouseover", (event: any) => {
-      emit("emitMouseoverState", event.path[0].id.split("-")[1]);
+      emit("emitMouseoverState", event.target.id.split("-")[1]);
     });
     landElement.classList.add("clickable-state");
   });
